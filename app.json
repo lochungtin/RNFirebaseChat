@@ -1,0 +1,12 @@
+{
+  "name": "RNFirebaseChat",
+  "displayName": "RNFirebaseChat",
+  "expo": {
+    "name": "RNFirebaseChat",
+    "slug": "RNFirebaseChat",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
