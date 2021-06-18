@@ -23,9 +23,11 @@ export interface ReduxAccountType {
 // theme type
 export interface ThemeType {
     accent: string,
+    accentFade: string,
     accountInputBgC: string,
     backgroundC: string,
     separatorC: string,
     textC: string,
     textDisabledC: string,
+    textLightC: string,
 }
