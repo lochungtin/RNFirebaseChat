@@ -14,8 +14,10 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpDetailScreen from '../screens/SignUpDetailScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 
-interface ReduxProps {
+import { ReduxAccountType } from '../types';
 
+interface ReduxProps {
+    account: ReduxAccountType,
 }
 
 const RootNav = createStackNavigator();
@@ -26,14 +28,20 @@ class AppNav extends React.Component<ReduxProps> {
             <NavigationContainer>
                 <StatusBar backgroundColor={theme.accent} />
                 <RootNav.Navigator screenOptions={{ headerShown: false }}>
-                    <RootNav.Screen component={SignInScreen} name='signIn' />
-                    <RootNav.Screen component={SignUpScreen} name='signUp' />
-                    <RootNav.Screen component={SignUpDetailScreen} name='signUpInfo' />
-                    <RootNav.Screen component={ForgotPswdScreen} name='forgotPswd' />
-                    <RootNav.Screen component={HomeScreen} name='home' />
-                    <RootNav.Screen component={ChatScreen} name='chat' />
-                    <RootNav.Screen component={AccountScreen} name='acc' />
-                    <RootNav.Screen component={AccountViewScreen} name='accV' />
+                    {this.props.account.firebase === null ?
+                        <>
+                            <RootNav.Screen component={SignInScreen} name='signIn' />
+                            <RootNav.Screen component={SignUpScreen} name='signUp' />
+                            <RootNav.Screen component={SignUpDetailScreen} name='signUpInfo' />
+                            <RootNav.Screen component={ForgotPswdScreen} name='forgotPswd' />
+                        </> :
+                        <>
+                            <RootNav.Screen component={HomeScreen} name='home' />
+                            <RootNav.Screen component={ChatScreen} name='chat' />
+                            <RootNav.Screen component={AccountScreen} name='acc' />
+                            <RootNav.Screen component={AccountViewScreen} name='accV' />
+                        </>
+                    }
                 </RootNav.Navigator>
             </NavigationContainer>
         );
@@ -41,7 +49,7 @@ class AppNav extends React.Component<ReduxProps> {
 }
 
 const mapStateToProps = (state: ReduxProps) => ({
-
+    account: state.account,
 });
 
 export default connect(mapStateToProps)(AppNav);
