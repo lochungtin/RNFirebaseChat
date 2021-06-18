@@ -66,7 +66,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                 <View style={AccountScreenStyles.signUpPromptContainer}>
                     <Text style={{ ...AccountScreenStyles.signUpPromptText, color: theme.textC }}>
                         Already have an account?
-                            </Text>
+                    </Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('signIn')}>
                         <Text style={{ ...AccountScreenStyles.signUpText, color: theme.accent }}>
                             Sign In
