@@ -11,8 +11,9 @@ import { theme } from '../data/color';
 import { AccountScreenStyles, ScreenStyles } from './styles';
 
 import { signIn } from '../firebase/auth';
-import { login } from '../redux/action';
+import { login, updateAccInfo } from '../redux/action';
 import { store } from '../redux/store';
+import { firebaseFetchAccInfo } from '../firebase/data';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>
@@ -39,6 +40,9 @@ class Screen extends React.Component<NavProps & ReduxProps> {
 					email: res.user?.email || '',
 					uid: res.user?.uid || '',
 				}));
+
+                firebaseFetchAccInfo(res.user?.uid || '')
+                    .then(res => store.dispatch(updateAccInfo(res)));
             })
             .catch(err => {
                 let message: string;
