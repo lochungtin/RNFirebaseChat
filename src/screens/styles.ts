@@ -12,11 +12,22 @@ export const ScreenStyles = StyleSheet.create({
         width: screenWidth,
     },
     alignLeft: {
-        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+    },
+    alignRight: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-end',
-    }
+    },
+    scrollView: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        width: screenWidth,
+    },
 });
 
 export const AccountScreenStyles = StyleSheet.create({
@@ -55,7 +66,6 @@ export const AccountScreenStyles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 100,
         width: screenWidth * 0.65,
     },
     signUpPromptText: {
@@ -64,5 +74,11 @@ export const AccountScreenStyles = StyleSheet.create({
     signUpText: {
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    backContainer: {
+        height: 200,
+        paddingTop: 60,
+        width: screenWidth * 0.85,
+        zIndex: 2,
     },
 });

@@ -1,3 +1,4 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { Animated, Text, TouchableOpacity, View } from 'react-native';
@@ -10,13 +11,17 @@ import SignInHeader from '../components/SignInHeader';
 import { theme } from '../data/color';
 import { AccountScreenStyles, ScreenStyles } from './styles';
 
+interface NavProps {
+    navigation: StackNavigationProp<any, any>
+}
+
 interface ReduxProps {
 
 }
 
 const GradientView = Animated.createAnimatedComponent(LinearGradient);
 
-class Screen extends React.Component<ReduxProps> {
+class Screen extends React.Component<NavProps & ReduxProps> {
 
     state = {
         email: '',
@@ -46,12 +51,12 @@ class Screen extends React.Component<ReduxProps> {
                     onForgot={() => { }}
                     placeholder='PASSWORD'
                 />
-                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreenStyles.loginBtnContainer }}>
+                <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
                     <TouchableOpacity>
                         <GradientView
+                            end={[0, 1]}
                             colors={[theme.accent, theme.accentFade]}
                             start={[1, 0]}
-                            end={[0, 1]}
                             style={AccountScreenStyles.loginBtn}
                         >
                             <Icon
@@ -70,11 +75,12 @@ class Screen extends React.Component<ReduxProps> {
                         </GradientView>
                     </TouchableOpacity>
                 </View>
+                <View style={{ height: 100 }} />
                 <View style={AccountScreenStyles.signUpPromptContainer}>
                     <Text style={{ ...AccountScreenStyles.signUpPromptText, color: theme.textC }}>
                         Don't have an account?
                     </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('signUp')}>
                         <Text style={{ ...AccountScreenStyles.signUpText, color: theme.accent }}>
                             Sign Up
                         </Text>
