@@ -1,3 +1,4 @@
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { StatusBar } from 'react-native';
@@ -21,16 +22,18 @@ const RootNav = createStackNavigator();
 class AppNav extends React.Component<ReduxProps> {
     render() {
         return (
-            <RootNav.Navigator screenOptions={{ headerShown: false }}>
+            <NavigationContainer>
                 <StatusBar backgroundColor={'#FFF'} />
-                <RootNav.Screen component={SignInScreen} name='signIn' />
-                <RootNav.Screen component={SignUpScreen} name='signUp' />
-                <RootNav.Screen component={ForgotPswdScreen} name='forgotPswd' />
-                <RootNav.Screen component={HomeScreen} name='home' />
-                <RootNav.Screen component={ChatScreen} name='chat' />
-                <RootNav.Screen component={AccountScreen} name='acc'/>
-                <RootNav.Screen component={AccountViewScreen} name='accV'/>
-            </RootNav.Navigator>
+                <RootNav.Navigator screenOptions={{ headerShown: false }}>
+                    <RootNav.Screen component={SignInScreen} name='signIn' />
+                    <RootNav.Screen component={SignUpScreen} name='signUp' />
+                    <RootNav.Screen component={ForgotPswdScreen} name='forgotPswd' />
+                    <RootNav.Screen component={HomeScreen} name='home' />
+                    <RootNav.Screen component={ChatScreen} name='chat' />
+                    <RootNav.Screen component={AccountScreen} name='acc' />
+                    <RootNav.Screen component={AccountViewScreen} name='accV' />
+                </RootNav.Navigator>
+            </NavigationContainer>
         );
     }
 }
