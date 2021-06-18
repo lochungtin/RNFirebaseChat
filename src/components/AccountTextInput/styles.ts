@@ -12,7 +12,7 @@ export const AccountTextInputStyle = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop: 25,
         paddingHorizontal: 10,
-        width: screenWidth * 0.75,
+        width: screenWidth * 0.8,
     },
     textInput: {
         fontSize: 16,
@@ -27,7 +27,7 @@ export const AccountTextInputStyle = StyleSheet.create({
         elevation: 10,
     },
     forgotBtn: {
-        width: screenWidth * 0.15,
+        width: screenWidth * 0.25,
     },
     forgotBtnText: {
         fontWeight: 'bold',

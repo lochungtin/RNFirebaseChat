@@ -4,6 +4,7 @@ import React from 'react';
 import { StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
+import { theme } from '../data/color';
 
 import AccountScreen from '../screens/AccountScreen';
 import AccountViewScreen from '../screens/AccountViewScreen';
@@ -23,7 +24,7 @@ class AppNav extends React.Component<ReduxProps> {
     render() {
         return (
             <NavigationContainer>
-                <StatusBar backgroundColor={'#FFF'} />
+                <StatusBar backgroundColor={theme.accent} />
                 <RootNav.Navigator screenOptions={{ headerShown: false }}>
                     <RootNav.Screen component={SignInScreen} name='signIn' />
                     <RootNav.Screen component={SignUpScreen} name='signUp' />

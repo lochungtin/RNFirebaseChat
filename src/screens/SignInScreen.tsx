@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import AccountTextInput from '../components/AccountTextInput';
+import SignInHeader from '../components/SignInHeader';
 
 import { theme } from '../data/color';
 import { AccountScreenStyles, ScreenStyles } from './styles';
@@ -25,6 +26,7 @@ class Screen extends React.Component<ReduxProps> {
     render() {
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
+                <SignInHeader />
                 <View style={{ height: 200 }} />
                 <Text style={{ ...AccountScreenStyles.loginHeaderText, color: theme.textC }}>
                     Login

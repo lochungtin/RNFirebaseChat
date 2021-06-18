@@ -24,12 +24,12 @@ export const AccountScreenStyles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         marginVertical: 5,
-        width: screenWidth * 0.75,
+        width: screenWidth * 0.8,
     },
     signInText: {
         fontSize: 20,
         marginVertical: 5,
-        width: screenWidth * 0.75,
+        width: screenWidth * 0.8,
     },
     loginBtnContainer: {
         marginTop: 50,
@@ -56,7 +56,7 @@ export const AccountScreenStyles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 100,
-        width: screenWidth * 0.6,
+        width: screenWidth * 0.65,
     },
     signUpPromptText: {
         fontSize: 16,
