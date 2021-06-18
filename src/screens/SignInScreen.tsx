@@ -44,7 +44,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     hidden
                     iconName='lock-outline'
                     onChangeText={(pswd: string) => this.setState({ pswd })}
-                    onForgot={() => { }}
+                    onForgot={() => this.props.navigation.navigate('forgotPswd')}
                     placeholder='PASSWORD'
                 />
                 <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
