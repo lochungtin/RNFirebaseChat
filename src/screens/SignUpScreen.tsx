@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { showMessage } from "react-native-flash-message";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -25,6 +26,39 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         email: '',
         pswd: '',
         rPswd: '',
+    }
+
+    continue = () => {
+        if (!this.state.email)
+            return showMessage({
+                backgroundColor: theme.accent,
+                color: theme.textC,
+                message: 'An email is required',
+            });
+
+        if (!this.state.pswd)
+            return showMessage({
+                backgroundColor: theme.accent,
+                color: theme.textC,
+                message: 'A password is required',
+            });
+
+        if (this.state.pswd !== this.state.rPswd)
+            return showMessage({
+                backgroundColor: theme.accent,
+                color: theme.textC,
+                message: `Passwords don't match`,
+            });
+
+        if (this.state.pswd.length < 6)
+            return showMessage({
+                backgroundColor: theme.accent,
+                color: theme.textC,
+                message: 'Password must have 6+ characters',
+            });
+
+
+        this.props.navigation.navigate('signUpInfo', { email: this.state.email, pswd: this.state.pswd });
     }
 
     render() {
@@ -61,7 +95,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     placeholder='REENTER PASSWORD'
                 />
                 <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('signUpInfo', { email: this.state.email, pswd: this.state.pswd })} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
+                    <TouchableOpacity onPress={this.continue} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
                         <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
                             CONTINUE
                         </Text>

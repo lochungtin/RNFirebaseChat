@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { showMessage } from "react-native-flash-message";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -8,10 +9,16 @@ import AccountTextInput from '../components/AccountTextInput';
 import SignInHeader from '../components/SignInHeader';
 
 import { theme } from '../data/color';
+import { signUp } from '../firebase/auth';
+import { firebaseSetAccInfo } from '../firebase/data';
+import { login, updateAccInfo } from '../redux/action';
+import { store } from '../redux/store';
+import { AccountInfoType } from '../types';
 import { AccountScreenStyles, ScreenStyles } from './styles';
 
 interface NavProps {
-    navigation: StackNavigationProp<any, any>
+    navigation: StackNavigationProp<any, any>,
+    route: any
 }
 
 
@@ -24,6 +31,54 @@ class Screen extends React.Component<NavProps & ReduxProps> {
     state = {
         name: '',
         bio: '',
+    }
+
+    signUp = () => {
+        console.log('s');
+        if (!this.state.name)
+            return showMessage({
+                backgroundColor: theme.accent,
+                color: theme.textC,
+                message: 'A username is required',
+            });
+
+        let params: { email: string, pswd: string } = this.props.route.params;
+        signUp(params.email, params.pswd)
+            .then(res => {
+                let accInfo: AccountInfoType = {
+                    diplayName: this.state.name,
+                    bio: this.state.bio,
+                };
+
+                firebaseSetAccInfo(res.user?.uid || '', accInfo);
+
+                store.dispatch(updateAccInfo(accInfo));
+
+                store.dispatch(login({
+					email: res.user?.email || '',
+					uid: res.user?.uid || '',
+				}));
+            })
+            .catch(err => {
+                let message: string;
+
+                switch (err.code) {
+                    case 'auth/invalid-email':
+                        message = 'Invalid Email';
+                        break;
+                    case 'auth/email-already-in-use':
+                        message = 'Email already in use, try logging in';
+                        break;
+                    default:
+                        message = err.toString();
+                }
+
+                showMessage({
+                    message,
+                    backgroundColor: theme.accent,
+                    color: theme.textC,
+                });
+            });
     }
 
     render() {
@@ -56,7 +111,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     placeholder='BIO'
                 />
                 <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
+                    <TouchableOpacity onPress={this.signUp} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
                         <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
                             SIGN UP
                         </Text>

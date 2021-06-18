@@ -19,7 +19,7 @@ const updateAccount = (accountState = defaultAccountState, action: ReduxActionTy
             update.info = action.payload;
             return update;
         default:
-            return update;
+            return accountState;
     }
 }
 

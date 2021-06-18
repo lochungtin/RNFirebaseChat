@@ -2,8 +2,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { StatusBar } from 'react-native';
+import FlashMessage from "react-native-flash-message";
 import { connect } from 'react-redux';
-import { theme } from '../data/color';
 
 import AccountScreen from '../screens/AccountScreen';
 import AccountViewScreen from '../screens/AccountViewScreen';
@@ -13,6 +13,8 @@ import HomeScreen from '../screens/HomeScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpDetailScreen from '../screens/SignUpDetailScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+
+import { theme } from '../data/color';
 
 import { ReduxAccountType } from '../types';
 
@@ -24,6 +26,7 @@ const RootNav = createStackNavigator();
 
 class AppNav extends React.Component<ReduxProps> {
     render() {
+        console.log(this.props.account)
         return (
             <NavigationContainer>
                 <StatusBar backgroundColor={theme.accent} />
@@ -43,6 +46,7 @@ class AppNav extends React.Component<ReduxProps> {
                         </>
                     }
                 </RootNav.Navigator>
+                <FlashMessage position='center' />
             </NavigationContainer>
         );
     }
