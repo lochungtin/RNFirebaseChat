@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
+import { logout } from '../redux/action';
+import { store } from '../redux/store';
 
 interface ReduxProps {
 
@@ -10,9 +12,11 @@ class Screen extends React.Component<ReduxProps> {
     render() {
         return (
             <View>
-                <Text>
-                    
-                </Text>
+                <TouchableOpacity onPress={() => store.dispatch(logout())}>
+                    <Text>
+                        Logout
+                    </Text>
+                </TouchableOpacity>
             </View>
         );
     }

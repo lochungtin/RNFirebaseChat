@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { showMessage } from "react-native-flash-message";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -8,6 +9,7 @@ import AccountTextInput from '../components/AccountTextInput';
 import SignInHeader from '../components/SignInHeader';
 
 import { theme } from '../data/color';
+import { resetPswd } from '../firebase/auth';
 import { AccountScreenStyles, ScreenStyles } from './styles';
 
 interface NavProps {
@@ -23,6 +25,40 @@ class Screen extends React.Component<NavProps & ReduxProps> {
 
     state = {
         email: '',
+    }
+
+    resetPswd = () => {
+        if (!this.state.email)
+            return showMessage({
+                backgroundColor: theme.accent,
+                color: theme.textC,
+                message: 'Enter email to reset password'
+            });
+
+        resetPswd(this.state.email)
+            .then(() => showMessage({
+                backgroundColor: theme.accent,
+                color: theme.textC,
+                message: 'Reset password email sent',
+            }))
+            .catch(err => {
+                let message: string;
+
+                switch (err.code) {
+                    case 'auth/user-not-found':
+                        message = 'No accounts registered under this email'
+                        break;
+                    default:
+                        message = err.toString();
+                        break;
+                }
+
+                showMessage({
+                    message,
+                    backgroundColor: theme.accent,
+                    color: theme.textC,
+                });
+            });
     }
 
     render() {
@@ -50,7 +86,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     placeholder='EMAIL'
                 />
                 <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
+                    <TouchableOpacity onPress={this.resetPswd} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
                         <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
                             RESET
                         </Text>
