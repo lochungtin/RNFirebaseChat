@@ -22,9 +22,8 @@ interface ReduxProps {
 class Screen extends React.Component<NavProps & ReduxProps> {
 
     state = {
-        email: '',
-        pswd: '',
-        rPswd: '',
+        name: '',
+        bio: '',
     }
 
     render() {
@@ -41,37 +40,33 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     </TouchableOpacity>
                 </View>
                 <Text style={{ ...AccountScreenStyles.loginHeaderText, color: theme.textC }}>
-                    Create account
+                    Add details
+                </Text>
+                <Text style={{ ...AccountScreenStyles.signInText, color: theme.textDisabledC }}>
+                    Setup account details
                 </Text>
                 <AccountTextInput
-                    iconName='email-outline'
-                    onChangeText={(email: string) => this.setState({ email })}
-                    placeholder='EMAIL'
+                    iconName='account'
+                    onChangeText={(name: string) => this.setState({ name })}
+                    placeholder='USERNAME'
                 />
                 <AccountTextInput
-                    hidden
-                    iconName='lock-outline'
-                    onChangeText={(pswd: string) => this.setState({ pswd })}
-                    placeholder='PASSWORD'
-                />
-                <AccountTextInput
-                    hidden
-                    iconName='lock-outline'
-                    onChangeText={(rPswd: string) => this.setState({ rPswd })}
-                    placeholder='REENTER PASSWORD'
+                    iconName='comment-text-outline'
+                    onChangeText={(bio: string) => this.setState({ bio })}
+                    placeholder='BIO'
                 />
                 <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('signUpInfo', { email: this.state.email, pswd: this.state.pswd })} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
+                    <TouchableOpacity style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
                         <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
-                            CONTINUE
+                            SIGN UP
                         </Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ height: 50 }} />
+                <View style={{ height: 100 }} />
                 <View style={AccountScreenStyles.signUpPromptContainer}>
                     <Text style={{ ...AccountScreenStyles.signUpPromptText, color: theme.textC }}>
                         Already have an account?
-                    </Text>
+                            </Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('signIn')}>
                         <Text style={{ ...AccountScreenStyles.signUpText, color: theme.accent }}>
                             Sign In

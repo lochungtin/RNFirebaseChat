@@ -1,8 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Animated, Text, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 
 import AccountTextInput from '../components/AccountTextInput';
@@ -18,8 +16,6 @@ interface NavProps {
 interface ReduxProps {
 
 }
-
-const GradientView = Animated.createAnimatedComponent(LinearGradient);
 
 class Screen extends React.Component<NavProps & ReduxProps> {
 
@@ -52,27 +48,10 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     placeholder='PASSWORD'
                 />
                 <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity>
-                        <GradientView
-                            end={[0, 1]}
-                            colors={[theme.accent, theme.accentFade]}
-                            start={[1, 0]}
-                            style={AccountScreenStyles.loginBtn}
-                        >
-                            <Icon
-                                color={'transparent'}
-                                name='arrow-right'
-                                size={25}
-                            />
-                            <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
-                                LOGIN
-                            </Text>
-                            <Icon
-                                color={theme.textLightC}
-                                name='arrow-right'
-                                size={25}
-                            />
-                        </GradientView>
+                    <TouchableOpacity style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
+                        <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
+                            LOGIN
+                        </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ height: 100 }} />
