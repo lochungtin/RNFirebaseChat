@@ -106,16 +106,15 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                 </View>
                 <ScrollView>
                     {Object.keys(this.props.contacts || {}).map(key => {
-                        console.log(key);
-                        // let contact = this.props.contacts[key];
-                        // return (
-                        //     <ContactItem
-                        //         key={contact.uid}
-                        //         contact={contact}
-                        //         onPress={() => this.props.navigation.navigate('chat', contact)}
-                        //         onPressPic={() => this.props.navigation.navigate('accV', contact)}
-                        //     />
-                        // );
+                        let contact = this.props.contacts[key];
+                        return (
+                            <ContactItem
+                                key={contact.uid}
+                                contact={contact}
+                                onPress={() => this.props.navigation.navigate('chat', contact)}
+                                onPressPic={() => this.props.navigation.navigate('accV', contact)}
+                            />
+                        );
                     })}
                     <View style={{ height: 40 }} />
                 </ScrollView>
@@ -134,7 +133,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     propagateSwipe={true}
                     swipeDirection='down'
                 >
-                    
+
                 </Modal>
             </View>
         );
