@@ -1,13 +1,13 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import Header from '../components/Headers/InAppHeader';
 
 import { theme } from '../data/color';
-import { HomeScreenStyles, ScreenStyles } from './styles';
+import { HomeScreenStyles, ScreenStyles, screenWidth } from './styles';
 
 
 import { signOut } from '../firebase/auth';
@@ -15,6 +15,7 @@ import { logout } from '../redux/action';
 import { store } from '../redux/store';
 import { AccountInfoType } from '../types';
 import ContactItem from '../components/ContactItem';
+import SeparatorLine from '../components/SeparatorLine';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,

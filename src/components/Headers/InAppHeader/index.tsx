@@ -8,14 +8,14 @@ export default class Header extends React.Component {
     render() {
         return (
             <Svg
-                height='90'
+                height='85'
                 width='411'
-                viewBox='0 0 411 90'
+                viewBox='0 0 411 85'
                 style={HeaderStyles.SVGContainer}
             >
                 <Path
-                    d='M 0 1 C 4 1 6 2 7 1 L 7 0 L 0 0'
-                    scale='60'
+                    d='M 0 2 C 1 3 3 1 7 2 C 11 3 13 3 14 2 L 14 0 L 0 0'
+                    scale='30'
                     fill={theme.accent}
                     x='0'
                     y='0'
