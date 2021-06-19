@@ -15,12 +15,7 @@ interface NavProps {
     navigation: StackNavigationProp<any, any>
 }
 
-
-interface ReduxProps {
-
-}
-
-class Screen extends React.Component<NavProps & ReduxProps> {
+export default class Screen extends React.Component<NavProps> {
 
     state = {
         email: '',
@@ -116,9 +111,3 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         );
     }
 }
-
-const mapStateToProps = (state: ReduxProps) => ({
-
-});
-
-export default connect(mapStateToProps)(Screen);

@@ -3,16 +3,18 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
-import AccountInfoItem from '../components/AccountInfoItem';
 
 import Header from '../components/Headers/InAppHeader';
-import { theme } from '../data/color';
-import { signOut } from '../firebase/auth';
 
+import { theme } from '../data/color';
+import { HomeScreenStyles, ScreenStyles } from './styles';
+
+
+import { signOut } from '../firebase/auth';
 import { logout } from '../redux/action';
 import { store } from '../redux/store';
 import { AccountInfoType } from '../types';
-import { HomeScreenStyles, ScreenStyles } from './styles';
+
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -31,7 +33,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
 
     render() {
         return (
-            <View style={ScreenStyles.screen}>
+            <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
                 <View style={{ ...ScreenStyles.alignRight, ...HomeScreenStyles.headerContainer }}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('acc')} style={HomeScreenStyles.headerIcon}>

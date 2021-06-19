@@ -3,30 +3,26 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { showMessage } from "react-native-flash-message";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { connect } from 'react-redux';
 
 import AccountTextInput from '../components/AccountTextInput';
 import SignInHeader from '../components/Headers/SignInHeader';
 
 import { theme } from '../data/color';
+import { LoginScreensStyles, ScreenStyles } from './styles';
+
 import { signUp } from '../firebase/auth';
 import { firebaseSetAccInfo } from '../firebase/data';
 import { login, updateAccInfo } from '../redux/action';
 import { store } from '../redux/store';
 import { AccountInfoType } from '../types';
-import { LoginScreensStyles, ScreenStyles } from './styles';
+
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
     route: any
 }
 
-
-interface ReduxProps {
-
-}
-
-class Screen extends React.Component<NavProps & ReduxProps> {
+export default class Screen extends React.Component<NavProps> {
 
     state = {
         name: '',
@@ -132,9 +128,3 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         );
     }
 }
-
-const mapStateToProps = (state: ReduxProps) => ({
-
-});
-
-export default connect(mapStateToProps)(Screen);

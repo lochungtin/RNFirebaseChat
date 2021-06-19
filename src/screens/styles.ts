@@ -86,7 +86,7 @@ export const HomeScreenStyles = StyleSheet.create({
     headerContainer: {
         alignItems: 'flex-end',
         height: 60,
-        width: screenWidth * 0.90,
+        width: screenWidth * 0.87,
         zIndex: 2,
     },
     headerIcon: {
@@ -126,6 +126,7 @@ export const AccountScreenStyles = StyleSheet.create({
         right: 0,
         top: 120,
         width: 40,
+        zIndex: 2,
     },
     modalRootContainer: {
         alignItems: 'center',

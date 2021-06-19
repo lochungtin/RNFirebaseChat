@@ -1,14 +1,10 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { connect } from 'react-redux';
 
 import { theme } from '../../data/color';
 import { AccountInfoItemStyles } from './styles';
 
-interface ReduxProps {
-
-}
 
 interface InfoProps {
     details: string,
@@ -17,7 +13,7 @@ interface InfoProps {
     title: string,
 }
 
-class AccountInfoItem extends React.Component<ReduxProps & InfoProps> {
+export default class AccountInfoItem extends React.Component<InfoProps> {
     render() {
         return (
             <View style={AccountInfoItemStyles.rootContainer}>
@@ -45,9 +41,3 @@ class AccountInfoItem extends React.Component<ReduxProps & InfoProps> {
         );
     }
 }
-
-const mapStateToProps = (state: ReduxProps) => ({
-
-});
-
-export default connect(mapStateToProps)(AccountInfoItem);

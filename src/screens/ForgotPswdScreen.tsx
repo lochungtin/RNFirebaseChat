@@ -3,25 +3,20 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { showMessage } from "react-native-flash-message";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { connect } from 'react-redux';
 
 import AccountTextInput from '../components/AccountTextInput';
 import SignInHeader from '../components/Headers/SignInHeader';
 
 import { theme } from '../data/color';
-import { resetPswd } from '../firebase/auth';
 import { LoginScreensStyles, ScreenStyles } from './styles';
+
+import { resetPswd } from '../firebase/auth';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>
 }
 
-
-interface ReduxProps {
-
-}
-
-class Screen extends React.Component<NavProps & ReduxProps> {
+export default class Screen extends React.Component<NavProps> {
 
     state = {
         email: '',
@@ -96,9 +91,3 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         );
     }
 }
-
-const mapStateToProps = (state: ReduxProps) => ({
-
-});
-
-export default connect(mapStateToProps)(Screen);
