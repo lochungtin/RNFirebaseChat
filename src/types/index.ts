@@ -40,6 +40,10 @@ export interface ContactType {
     uid: string,
 }
 
+export interface ContactMap {
+    [key: string]: ContactType,
+}
+
 // message type
 export interface MessageType {
     isSender: boolean,

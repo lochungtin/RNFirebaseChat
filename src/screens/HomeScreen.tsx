@@ -13,7 +13,7 @@ import { HomeScreenStyles, ScreenStyles } from './styles';
 import { signOut } from '../firebase/auth';
 import { logout } from '../redux/action';
 import { store } from '../redux/store';
-import { AccountInfoType } from '../types';
+import { AccountInfoType, ContactMap, ContactType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -21,6 +21,7 @@ interface NavProps {
 
 interface ReduxProps {
     account: AccountInfoType,
+    contacts: ContactMap,
 }
 
 class Screen extends React.Component<NavProps & ReduxProps> {
@@ -51,22 +52,14 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => {
+                    {Object.keys(this.props.contacts).map(key => {
+                        let contact = this.props.contacts[key];
                         return (
                             <ContactItem
-                                key={num}
-                                contact={{
-                                    displayName: 'Someone',
-                                    lastMessage: {
-                                        content: 'once upon a time, not long ago',
-                                        isSender: num % 4 == 0,
-                                        timestamp: 123490,
-                                    },
-                                    uid: '',
-                                    pinned: false,
-                                }}
-                                onPress={() => { console.log('p') }}
-                                onPressPic={() => { console.log('pfp') }}
+                                key={contact.uid}
+                                contact={contact}
+                                onPress={() => this.props.navigation.navigate('chat', contact)}
+                                onPressPic={() => this.props.navigation.navigate('accV', contact)}
                             />
                         );
                     })}
@@ -78,7 +71,8 @@ class Screen extends React.Component<NavProps & ReduxProps> {
 }
 
 const mapStateToProps = (state: ReduxProps) => ({
-    account: state.account
+    account: state.account,
+    contacts: state.contacts,
 });
 
 export default connect(mapStateToProps)(Screen);

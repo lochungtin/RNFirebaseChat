@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ReduxAccountType, ReduxActionType } from '../types';
+import { ContactMap, ContactType, ReduxAccountType, ReduxActionType } from '../types';
 import { ActionName } from './action';
 
 const defaultAccountState: ReduxAccountType = {
@@ -23,6 +23,23 @@ const updateAccount = (accountState = defaultAccountState, action: ReduxActionTy
     }
 }
 
+const defaultContactState: ContactMap = {};
+const updateContacts = (contactState = defaultContactState, action: ReduxActionType) => {
+    let update = { ...contactState };
+
+    switch (action.type) {
+        case ActionName.ADD_CONTACT:
+            update[action.payload.uid] = action.payload;
+            return update;
+        case ActionName.REMOVE_CONTACT:
+            delete update[action.payload];
+            return update;
+        default:
+            return contactState;
+    }
+}
+
 export default combineReducers({
     account: updateAccount,
+    contacts: updateContacts,
 });
