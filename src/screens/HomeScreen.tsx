@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { FloatingAction } from "react-native-floating-action";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -11,20 +12,25 @@ import { theme } from '../data/color';
 import { HomeScreenStyles, ScreenStyles } from './styles';
 
 import { signOut } from '../firebase/auth';
+import { firebaseFetchContacts } from '../firebase/data';
 import { logout } from '../redux/action';
 import { store } from '../redux/store';
-import { AccountInfoType, ContactMap, ContactType } from '../types';
+import { ContactMap, ReduxAccountType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
 }
 
 interface ReduxProps {
-    account: AccountInfoType,
+    account: ReduxAccountType,
     contacts: ContactMap,
 }
 
 class Screen extends React.Component<NavProps & ReduxProps> {
+
+    state = {
+        modalMode: '',
+    }
 
     logout = () => {
         store.dispatch(logout());
@@ -32,6 +38,33 @@ class Screen extends React.Component<NavProps & ReduxProps> {
     }
 
     render() {
+        let action: Array<any> = [
+            {
+                color: theme.accent,
+                icon: <Icon
+                    color={theme.textLightC}
+                    name='qrcode'
+                    size={20}
+                />,
+                name: 'code',
+                text: 'MY QR CODE',
+                textColor: theme.textC,
+            },
+            {
+                color: theme.accent,
+                icon: <Icon
+                    color={theme.textLightC}
+                    name='camera'
+                    size={20}
+                />,
+                name: 'scan',
+                text: 'SCANNER',
+                textColor: theme.textC,
+            },
+        ];
+
+        firebaseFetchContacts(this.props.account.firebase?.uid || '', val => console.log(val.val()));
+
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
@@ -65,6 +98,12 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     })}
                     <View style={{ height: 40 }} />
                 </ScrollView>
+                <FloatingAction
+                    actions={action}
+                    color={theme.accent}
+                    onPressItem={(modalMode: string | undefined) => this.setState({ modalMode: modalMode || '' })}
+                    overlayColor='#000000A0'
+                />
             </View>
         );
     }

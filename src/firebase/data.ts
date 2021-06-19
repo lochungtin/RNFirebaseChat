@@ -27,3 +27,9 @@ export const firebaseFetchAccInfo = async (uid: string) =>
         .ref(`/UserData/${uid}/accountInfo/`)
         .once('value')
         .then((snapshot: firebaseConfig.database.DataSnapshot) => snapshot.val());
+
+export const firebaseFetchContacts = async (uid: string, callback: (response: firebaseConfig.database.DataSnapshot) => void) => {
+    let ref = db.ref(`/UserData/${uid}/contacts/`);
+    ref.off();
+    ref.on('value', callback);
+}

@@ -18,4 +18,8 @@ target 'RNFirebaseChat' do
   #     flipper_post_install(installer)
   #   end
   # end
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+
 end
