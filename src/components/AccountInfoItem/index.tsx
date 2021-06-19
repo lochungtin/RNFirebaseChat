@@ -18,11 +18,6 @@ interface InfoProps {
 }
 
 class AccountInfoItem extends React.Component<ReduxProps & InfoProps> {
-
-    state = {
-        openEditModal: false,
-    }
-
     render() {
         return (
             <View style={AccountInfoItemStyles.rootContainer}>
@@ -39,7 +34,7 @@ class AccountInfoItem extends React.Component<ReduxProps & InfoProps> {
                         {this.props.details}
                     </Text>
                 </View>
-                {this.props.onEdit && <TouchableOpacity onPress={() => this.setState({ openEditModal: true })}>
+                {this.props.onEdit && <TouchableOpacity onPress={this.props.onEdit}>
                     <Icon
                         color={theme.accent}
                         name='pencil'
