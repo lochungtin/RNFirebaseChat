@@ -1,5 +1,6 @@
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -11,11 +12,15 @@ import { logout } from '../redux/action';
 import { store } from '../redux/store';
 import { HomeScreenStyles, ScreenStyles } from './styles';
 
+interface NavProps {
+    navigation: StackNavigationProp<any, any>,
+}
+
 interface ReduxProps {
 
 }
 
-class Screen extends React.Component<ReduxProps> {
+class Screen extends React.Component<NavProps & ReduxProps> {
 
     logout = () => {
         store.dispatch(logout());
@@ -24,10 +29,10 @@ class Screen extends React.Component<ReduxProps> {
 
     render() {
         return (
-            <View>
+            <View style={ScreenStyles.screen}>
                 <Header />
                 <View style={{ ...ScreenStyles.alignRight, ...HomeScreenStyles.headerContainer }}>
-                    <TouchableOpacity style={HomeScreenStyles.headerIcon}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('acc')} style={HomeScreenStyles.headerIcon}>
                         <Icon
                             color={theme.textLightC}
                             name='account'
@@ -42,6 +47,7 @@ class Screen extends React.Component<ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
+                
             </View>
         );
     }
