@@ -1,8 +1,8 @@
 import { Path, Svg } from 'react-native-svg';
 import React from 'react';
 
-import { theme } from '../../data/color';
-import { HeaderStyles } from './styles';
+import { theme } from '../../../data/color';
+import { HeaderStyles } from '../styles';
 
 export default class SignInHeader extends React.Component {
     render() {

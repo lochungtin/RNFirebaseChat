@@ -81,3 +81,15 @@ export const AccountScreenStyles = StyleSheet.create({
         zIndex: 2,
     },
 });
+
+export const HomeScreenStyles = StyleSheet.create({
+    headerContainer: {
+        alignItems: 'flex-end',
+        height: 60,
+        width: screenWidth * 0.90,
+        zIndex: 2,
+    },
+    headerIcon: {
+        marginLeft: 20,
+    },
+});

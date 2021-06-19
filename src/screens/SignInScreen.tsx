@@ -5,7 +5,7 @@ import { showMessage } from "react-native-flash-message";
 import { connect } from 'react-redux';
 
 import AccountTextInput from '../components/AccountTextInput';
-import SignInHeader from '../components/SignInHeader';
+import SignInHeader from '../components/Headers/SignInHeader';
 
 import { theme } from '../data/color';
 import { AccountScreenStyles, ScreenStyles } from './styles';

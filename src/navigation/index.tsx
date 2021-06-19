@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import React from 'react';
 import { StatusBar } from 'react-native';
 import FlashMessage from "react-native-flash-message";
@@ -30,7 +30,7 @@ class AppNav extends React.Component<ReduxProps> {
         return (
             <NavigationContainer>
                 <StatusBar backgroundColor={theme.accent} />
-                <RootNav.Navigator screenOptions={{ headerShown: false }}>
+                <RootNav.Navigator screenOptions={{ ...TransitionPresets.SlideFromRightIOS, headerShown: false }}>
                     {this.props.account.firebase === null ?
                         <>
                             <RootNav.Screen component={SignInScreen} name='signIn' />

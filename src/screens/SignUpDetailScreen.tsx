@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import AccountTextInput from '../components/AccountTextInput';
-import SignInHeader from '../components/SignInHeader';
+import SignInHeader from '../components/Headers/SignInHeader';
 
 import { theme } from '../data/color';
 import { signUp } from '../firebase/auth';
