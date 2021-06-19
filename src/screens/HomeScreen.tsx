@@ -59,18 +59,19 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                                 contact={{
                                     displayName: 'Someone',
                                     lastMessage: {
-                                        content: 'i want to die',
-                                        isSender: true,
+                                        content: 'once upon a time, not long ago',
+                                        isSender: num % 4 == 0,
                                         timestamp: 123490,
                                     },
-                                    uid: 'cunt',
-                                    pinned: true,
+                                    uid: '',
+                                    pinned: false,
                                 }}
                                 onPress={() => { console.log('p') }}
                                 onPressPic={() => { console.log('pfp') }}
                             />
                         );
                     })}
+                    <View style={{ height: 40 }} />
                 </ScrollView>
             </View>
         );

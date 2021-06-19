@@ -3,9 +3,10 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { theme } from '../../data/color';
-import { ContactItemStyles } from './styles';
+import { ContactItemStyles, screenWidth } from './styles';
 
 import { ContactType } from '../../types';
+import SeparatorLine from '../SeparatorLine';
 
 interface ItemProps {
     contact: ContactType,
@@ -17,11 +18,11 @@ const tempPfp = (
     <View style={{
         alignItems: 'center',
         backgroundColor: theme.accentFade,
-        borderRadius: 30,
+        borderRadius: 27.5,
         display: 'flex',
-        height: 60,
+        height: 55,
         justifyContent: 'center',
-        width: 60,
+        width: 55,
     }}>
         <Icon
             color={theme.textLightC}
@@ -33,20 +34,30 @@ const tempPfp = (
 
 export default class ContactItem extends React.Component<ItemProps> {
     render() {
+        let message: string = this.props.contact.lastMessage.isSender ? 'You' : this.props.contact.displayName;
+        
+        message += `: ${this.props.contact.lastMessage.content}`;
+
+        if (message.length > 32)
+            message = message.substring(0, 32) + '...';
+
         return (
-            <TouchableOpacity onPress={this.props.onPress} style={{ ...ContactItemStyles.rootContainer, borderColor: theme.separatorC }}>
-                <TouchableOpacity onPress={this.props.onPressPic} style={ContactItemStyles.pfpContainer}>
-                    {tempPfp}
+            <>
+                <TouchableOpacity onPress={this.props.onPress} style={ContactItemStyles.rootContainer}>
+                    <TouchableOpacity onPress={this.props.onPressPic} style={ContactItemStyles.pfpContainer}>
+                        {tempPfp}
+                    </TouchableOpacity>
+                    <View style={ContactItemStyles.rootTextContainer}>
+                        <Text style={{ ...ContactItemStyles.displayNameText, color: theme.textC }}>
+                            {this.props.contact.displayName}
+                        </Text>
+                        <Text style={{ color: theme.textDisabledC }}>
+                            {message}
+                        </Text>
+                    </View>
                 </TouchableOpacity>
-                <View style={ContactItemStyles.rootTextContainer}>
-                    <Text style={{ ...ContactItemStyles.displayNameText, color: theme.textC }}>
-                        {this.props.contact.displayName}
-                    </Text>
-                    <Text style={{ ...ContactItemStyles.lastMessageText, color: theme.textDisabledC }}>
-                        {this.props.contact.lastMessage.content}
-                    </Text>
-                </View>
-            </TouchableOpacity>
+                <SeparatorLine height={1} width={screenWidth} />
+            </>
         );
     }
 }
