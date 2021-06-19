@@ -13,7 +13,7 @@ interface ReduxProps {
 interface InfoProps {
     details: string,
     iconName: string,
-    onEdit?: (text: string) => void,
+    onEdit?: () => void,
     title: string,
 }
 
@@ -43,7 +43,7 @@ class AccountInfoItem extends React.Component<ReduxProps & InfoProps> {
                     <Icon
                         color={theme.accent}
                         name='pencil'
-                        size={30}
+                        size={25}
                     />
                 </TouchableOpacity>}
             </View>

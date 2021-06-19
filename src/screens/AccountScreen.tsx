@@ -1,16 +1,18 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
-import AccountInfoItem from '../components/AccountInfoItem';
 
+import AccountInfoItem from '../components/AccountInfoItem';
 import Header from '../components/Headers/InAppHeader';
 import SeparatorLine from '../components/SeparatorLine';
 
+import { AccountInfoItemStyles } from '../components/AccountInfoItem/styles';
 import { theme } from '../data/color';
-import { ReduxAccountType } from '../types';
 import { AccountScreenStyles, ScreenStyles, screenWidth } from './styles';
+
+import { ReduxAccountType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -67,13 +69,19 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     details={this.props.account.info?.displayName || ''}
                     iconName='account'
                     onEdit={() => { }}
-                    title='USERNAME'
+                    title='DISPLAY NAME'
                 />
                 <AccountInfoItem
                     details={this.props.account.info?.bio || ''}
                     iconName='comment-text-outline'
                     onEdit={() => { }}
                     title='BIO'
+                />
+                <AccountInfoItem
+                    details='*********'
+                    iconName='lock'
+                    onEdit={() => { }}
+                    title='PASSWORD'
                 />
             </View>
         );
