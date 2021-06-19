@@ -38,6 +38,8 @@ class Screen extends React.Component<NavProps & ReduxProps> {
     }
 
     render() {
+        firebaseFetchContacts(this.props.account.firebase?.uid || '', val => console.log(val.val()));
+
         let action: Array<any> = [
             {
                 color: theme.accent,
@@ -62,8 +64,6 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                 textColor: theme.textC,
             },
         ];
-
-        firebaseFetchContacts(this.props.account.firebase?.uid || '', val => console.log(val.val()));
 
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>

@@ -24,20 +24,8 @@ const updateAccount = (accountState = defaultAccountState, action: ReduxActionTy
 }
 
 const defaultContactState: ContactMap = {};
-const updateContacts = (contactState = defaultContactState, action: ReduxActionType) => {
-    let update = { ...contactState };
-
-    switch (action.type) {
-        case ActionName.ADD_CONTACT:
-            update[action.payload.uid] = action.payload;
-            return update;
-        case ActionName.REMOVE_CONTACT:
-            delete update[action.payload];
-            return update;
-        default:
-            return contactState;
-    }
-}
+const updateContacts = (contactState = defaultContactState, action: ReduxActionType) => 
+    action.type === ActionName.SET_CONTACT_LIST ? action.payload : contactState;
 
 export default combineReducers({
     account: updateAccount,
