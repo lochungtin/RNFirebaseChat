@@ -9,7 +9,7 @@ import AccountTextInput from '../components/AccountTextInput';
 import SignInHeader from '../components/Headers/SignInHeader';
 
 import { theme } from '../data/color';
-import { AccountScreenStyles, ScreenStyles } from './styles';
+import { LoginScreensStyles, ScreenStyles } from './styles';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>
@@ -65,7 +65,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <SignInHeader />
-                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreenStyles.backContainer }}>
+                <View style={{ ...ScreenStyles.alignLeft, ...LoginScreensStyles.backContainer }}>
                     <TouchableOpacity onPress={this.props.navigation.goBack}>
                         <Icon
                             color={theme.textLightC}
@@ -74,7 +74,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
-                <Text style={{ ...AccountScreenStyles.loginHeaderText, color: theme.textC }}>
+                <Text style={{ ...LoginScreensStyles.loginHeaderText, color: theme.textC }}>
                     Create account
                 </Text>
                 <AccountTextInput
@@ -94,20 +94,20 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     onChangeText={(rPswd: string) => this.setState({ rPswd })}
                     placeholder='REENTER PASSWORD'
                 />
-                <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity onPress={this.continue} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
-                        <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
+                <View style={{ ...ScreenStyles.alignRight, ...LoginScreensStyles.loginBtnContainer }}>
+                    <TouchableOpacity onPress={this.continue} style={{ ...LoginScreensStyles.loginBtn, backgroundColor: theme.accent }}>
+                        <Text style={{ ...LoginScreensStyles.loginText, color: theme.textLightC }}>
                             CONTINUE
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ height: 50 }} />
-                <View style={AccountScreenStyles.signUpPromptContainer}>
-                    <Text style={{ ...AccountScreenStyles.signUpPromptText, color: theme.textC }}>
+                <View style={LoginScreensStyles.signUpPromptContainer}>
+                    <Text style={{ ...LoginScreensStyles.signUpPromptText, color: theme.textC }}>
                         Already have an account?
                     </Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('signIn')}>
-                        <Text style={{ ...AccountScreenStyles.signUpText, color: theme.accent }}>
+                        <Text style={{ ...LoginScreensStyles.signUpText, color: theme.accent }}>
                             Sign In
                         </Text>
                     </TouchableOpacity>

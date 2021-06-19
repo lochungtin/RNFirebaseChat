@@ -10,7 +10,7 @@ import SignInHeader from '../components/Headers/SignInHeader';
 
 import { theme } from '../data/color';
 import { resetPswd } from '../firebase/auth';
-import { AccountScreenStyles, ScreenStyles } from './styles';
+import { LoginScreensStyles, ScreenStyles } from './styles';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>
@@ -65,7 +65,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <SignInHeader />
-                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreenStyles.backContainer }}>
+                <View style={{ ...ScreenStyles.alignLeft, ...LoginScreensStyles.backContainer }}>
                     <TouchableOpacity onPress={this.props.navigation.goBack}>
                         <Icon
                             color={theme.textLightC}
@@ -74,10 +74,10 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
-                <Text style={{ ...AccountScreenStyles.loginHeaderText, color: theme.textC }}>
+                <Text style={{ ...LoginScreensStyles.loginHeaderText, color: theme.textC }}>
                     Reset password
                 </Text>
-                <Text style={{ ...AccountScreenStyles.signInText, color: theme.textDisabledC }}>
+                <Text style={{ ...LoginScreensStyles.signInText, color: theme.textDisabledC }}>
                     An email will be sent to the following account to reset your password.
                 </Text>
                 <AccountTextInput
@@ -85,9 +85,9 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     onChangeText={(email: string) => this.setState({ email })}
                     placeholder='EMAIL'
                 />
-                <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity onPress={this.resetPswd} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
-                        <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
+                <View style={{ ...ScreenStyles.alignRight, ...LoginScreensStyles.loginBtnContainer }}>
+                    <TouchableOpacity onPress={this.resetPswd} style={{ ...LoginScreensStyles.loginBtn, backgroundColor: theme.accent }}>
+                        <Text style={{ ...LoginScreensStyles.loginText, color: theme.textLightC }}>
                             RESET
                         </Text>
                     </TouchableOpacity>

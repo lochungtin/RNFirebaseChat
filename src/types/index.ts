@@ -11,7 +11,7 @@ export interface FirebaseAccountType {
 }
 
 export interface AccountInfoType {
-    diplayName: string,
+    displayName: string,
     bio: string,
 }
 

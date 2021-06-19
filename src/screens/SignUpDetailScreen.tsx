@@ -14,7 +14,7 @@ import { firebaseSetAccInfo } from '../firebase/data';
 import { login, updateAccInfo } from '../redux/action';
 import { store } from '../redux/store';
 import { AccountInfoType } from '../types';
-import { AccountScreenStyles, ScreenStyles } from './styles';
+import { LoginScreensStyles, ScreenStyles } from './styles';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -46,7 +46,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         signUp(params.email, params.pswd)
             .then(res => {
                 let accInfo: AccountInfoType = {
-                    diplayName: this.state.name,
+                    displayName: this.state.name,
                     bio: this.state.bio,
                 };
 
@@ -85,7 +85,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <SignInHeader />
-                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreenStyles.backContainer }}>
+                <View style={{ ...ScreenStyles.alignLeft, ...LoginScreensStyles.backContainer }}>
                     <TouchableOpacity onPress={this.props.navigation.goBack}>
                         <Icon
                             color={theme.textLightC}
@@ -94,10 +94,10 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
-                <Text style={{ ...AccountScreenStyles.loginHeaderText, color: theme.textC }}>
+                <Text style={{ ...LoginScreensStyles.loginHeaderText, color: theme.textC }}>
                     Add details
                 </Text>
-                <Text style={{ ...AccountScreenStyles.signInText, color: theme.textDisabledC }}>
+                <Text style={{ ...LoginScreensStyles.signInText, color: theme.textDisabledC }}>
                     Setup account details
                 </Text>
                 <AccountTextInput
@@ -110,20 +110,20 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     onChangeText={(bio: string) => this.setState({ bio })}
                     placeholder='BIO'
                 />
-                <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity onPress={this.signUp} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
-                        <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
+                <View style={{ ...ScreenStyles.alignRight, ...LoginScreensStyles.loginBtnContainer }}>
+                    <TouchableOpacity onPress={this.signUp} style={{ ...LoginScreensStyles.loginBtn, backgroundColor: theme.accent }}>
+                        <Text style={{ ...LoginScreensStyles.loginText, color: theme.textLightC }}>
                             SIGN UP
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ height: 100 }} />
-                <View style={AccountScreenStyles.signUpPromptContainer}>
-                    <Text style={{ ...AccountScreenStyles.signUpPromptText, color: theme.textC }}>
+                <View style={LoginScreensStyles.signUpPromptContainer}>
+                    <Text style={{ ...LoginScreensStyles.signUpPromptText, color: theme.textC }}>
                         Already have an account?
                     </Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('signIn')}>
-                        <Text style={{ ...AccountScreenStyles.signUpText, color: theme.accent }}>
+                        <Text style={{ ...LoginScreensStyles.signUpText, color: theme.accent }}>
                             Sign In
                         </Text>
                     </TouchableOpacity>

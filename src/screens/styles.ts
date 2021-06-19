@@ -1,6 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
 
-const screenWidth = Dimensions.get('screen').width;
+export const screenWidth = Dimensions.get('screen').width;
 
 export const ScreenStyles = StyleSheet.create({
     screen: {
@@ -30,7 +30,7 @@ export const ScreenStyles = StyleSheet.create({
     },
 });
 
-export const AccountScreenStyles = StyleSheet.create({
+export const LoginScreensStyles = StyleSheet.create({
     loginHeaderText: {
         fontSize: 30,
         fontWeight: 'bold',
@@ -91,5 +91,40 @@ export const HomeScreenStyles = StyleSheet.create({
     },
     headerIcon: {
         marginLeft: 20,
+    },
+});
+
+export const AccountScreenStyles = StyleSheet.create({
+    headerContainer: {
+        alignItems: 'center',
+        height: 60,
+        width: screenWidth * 0.90,
+        zIndex: 2,
+    },
+    pfpStack: {
+        height: 160,
+        marginBottom: 60,
+        marginTop: 60,
+        width: 160,
+    },
+    pfpContainer: {
+        alignItems: 'center',
+        borderRadius: 80,
+        display: 'flex',
+        height: 160,
+        justifyContent: 'center',
+        position: 'absolute',
+        width: 160,
+    },
+    pfpEditBtn: {
+        alignItems: 'center',
+        borderRadius: 20,
+        display: 'flex',
+        justifyContent: 'center',
+        height: 40,
+        position: 'absolute',
+        right: 0,
+        top: 120,
+        width: 40,
     },
 });

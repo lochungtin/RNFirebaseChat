@@ -5,7 +5,7 @@ export const theme: ThemeType = {
     accentFade: '#f5dba4',
     accountInputBgC: '#d6d5d2',
     backgroundC: '#fcfcfc',
-    separatorC: '#bababa',
+    separatorC: '#dadada',
     textC: '#1c1c1c',
     textDisabledC: '#969696',
     textLightC: '#f5f2eb',

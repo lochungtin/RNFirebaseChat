@@ -3,6 +3,7 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
+import AccountInfoItem from '../components/AccountInfoItem';
 
 import Header from '../components/Headers/InAppHeader';
 import { theme } from '../data/color';
@@ -10,6 +11,7 @@ import { signOut } from '../firebase/auth';
 
 import { logout } from '../redux/action';
 import { store } from '../redux/store';
+import { AccountInfoType } from '../types';
 import { HomeScreenStyles, ScreenStyles } from './styles';
 
 interface NavProps {
@@ -17,7 +19,7 @@ interface NavProps {
 }
 
 interface ReduxProps {
-
+    account: AccountInfoType,
 }
 
 class Screen extends React.Component<NavProps & ReduxProps> {
@@ -47,14 +49,13 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
-                
             </View>
         );
     }
 }
 
 const mapStateToProps = (state: ReduxProps) => ({
-
+    account: state.account
 });
 
 export default connect(mapStateToProps)(Screen);

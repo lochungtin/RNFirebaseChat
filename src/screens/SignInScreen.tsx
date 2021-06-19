@@ -8,7 +8,7 @@ import AccountTextInput from '../components/AccountTextInput';
 import SignInHeader from '../components/Headers/SignInHeader';
 
 import { theme } from '../data/color';
-import { AccountScreenStyles, ScreenStyles } from './styles';
+import { LoginScreensStyles, ScreenStyles } from './styles';
 
 import { signIn } from '../firebase/auth';
 import { login, updateAccInfo } from '../redux/action';
@@ -75,10 +75,10 @@ class Screen extends React.Component<NavProps & ReduxProps> {
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <SignInHeader />
                 <View style={{ height: 200 }} />
-                <Text style={{ ...AccountScreenStyles.loginHeaderText, color: theme.textC }}>
+                <Text style={{ ...LoginScreensStyles.loginHeaderText, color: theme.textC }}>
                     Login
                 </Text>
-                <Text style={{ ...AccountScreenStyles.signInText, color: theme.textDisabledC }}>
+                <Text style={{ ...LoginScreensStyles.signInText, color: theme.textDisabledC }}>
                     Please sign in to continue
                 </Text>
                 <AccountTextInput
@@ -93,20 +93,20 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     onForgot={() => this.props.navigation.navigate('forgotPswd')}
                     placeholder='PASSWORD'
                 />
-                <View style={{ ...ScreenStyles.alignRight, ...AccountScreenStyles.loginBtnContainer }}>
-                    <TouchableOpacity onPress={this.login} style={{ ...AccountScreenStyles.loginBtn, backgroundColor: theme.accent }}>
-                        <Text style={{ ...AccountScreenStyles.loginText, color: theme.textLightC }}>
+                <View style={{ ...ScreenStyles.alignRight, ...LoginScreensStyles.loginBtnContainer }}>
+                    <TouchableOpacity onPress={this.login} style={{ ...LoginScreensStyles.loginBtn, backgroundColor: theme.accent }}>
+                        <Text style={{ ...LoginScreensStyles.loginText, color: theme.textLightC }}>
                             LOGIN
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{ height: 100 }} />
-                <View style={AccountScreenStyles.signUpPromptContainer}>
-                    <Text style={{ ...AccountScreenStyles.signUpPromptText, color: theme.textC }}>
+                <View style={LoginScreensStyles.signUpPromptContainer}>
+                    <Text style={{ ...LoginScreensStyles.signUpPromptText, color: theme.textC }}>
                         Don't have an account?
                     </Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('signUp')}>
-                        <Text style={{ ...AccountScreenStyles.signUpText, color: theme.accent }}>
+                        <Text style={{ ...LoginScreensStyles.signUpText, color: theme.accent }}>
                             Sign Up
                         </Text>
                     </TouchableOpacity>
