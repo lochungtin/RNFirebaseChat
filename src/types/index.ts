@@ -31,3 +31,18 @@ export interface ThemeType {
     textDisabledC: string,
     textLightC: string,
 }
+
+// contact type
+export interface ContactType {
+    displayName: string,
+    lastMessage: MessageType,
+    pinned: boolean,
+    uid: string,
+}
+
+// message type
+export interface MessageType {
+    isSender: boolean,
+    content: string,
+    timestamp: number,
+}

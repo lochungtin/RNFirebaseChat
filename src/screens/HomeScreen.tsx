@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -14,7 +14,7 @@ import { signOut } from '../firebase/auth';
 import { logout } from '../redux/action';
 import { store } from '../redux/store';
 import { AccountInfoType } from '../types';
-
+import ContactItem from '../components/ContactItem';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -51,6 +51,27 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
+                <ScrollView>
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => {
+                        return (
+                            <ContactItem
+                                key={num}
+                                contact={{
+                                    displayName: 'Someone',
+                                    lastMessage: {
+                                        content: 'i want to die',
+                                        isSender: true,
+                                        timestamp: 123490,
+                                    },
+                                    uid: 'cunt',
+                                    pinned: true,
+                                }}
+                                onPress={() => { console.log('p') }}
+                                onPressPic={() => { console.log('pfp') }}
+                            />
+                        );
+                    })}
+                </ScrollView>
             </View>
         );
     }

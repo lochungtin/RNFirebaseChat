@@ -8,9 +8,9 @@ export default class Header extends React.Component {
     render() {
         return (
             <Svg
-                height='300'
+                height='90'
                 width='411'
-                viewBox='0 0 411 300'
+                viewBox='0 0 411 90'
                 style={HeaderStyles.SVGContainer}
             >
                 <Path
