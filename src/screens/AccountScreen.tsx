@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -8,11 +9,12 @@ import AccountInfoItem from '../components/AccountInfoItem';
 import Header from '../components/Headers/InAppHeader';
 import SeparatorLine from '../components/SeparatorLine';
 
-import { AccountInfoItemStyles } from '../components/AccountInfoItem/styles';
 import { theme } from '../data/color';
 import { AccountScreenStyles, ScreenStyles, screenWidth } from './styles';
 
 import { ReduxAccountType } from '../types';
+import AccountTextInput from '../components/AccountTextInput';
+import InfoTextInput from '../components/InfoTextInput';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -83,6 +85,16 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     onEdit={() => { }}
                     title='PASSWORD'
                 />
+                <Modal
+                    isVisible={true}
+                    style={AccountScreenStyles.modalRootContainer}
+                >
+                    <InfoTextInput
+                        iconName='account'
+                        onConfirm={(text: string) => { }}
+                        placeholder='display name'
+                    />
+                </Modal>
             </View>
         );
     }

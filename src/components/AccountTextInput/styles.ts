@@ -32,5 +32,5 @@ export const AccountTextInputStyle = StyleSheet.create({
     forgotBtnText: {
         fontWeight: 'bold',
         fontSize: 15,
-    }
+    },
 });

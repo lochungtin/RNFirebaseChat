@@ -127,4 +127,12 @@ export const AccountScreenStyles = StyleSheet.create({
         top: 120,
         width: 40,
     },
+    modalRootContainer: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        margin: 0,
+        padding: 0,
+    },
 });
