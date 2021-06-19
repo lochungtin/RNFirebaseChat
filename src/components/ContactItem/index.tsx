@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { theme } from '../../data/color';
-import { ContactItemStyles, screenWidth } from './styles';
+import { ContactItemStyles } from './styles';
 
 import { ContactType } from '../../types';
 import SeparatorLine from '../SeparatorLine';
@@ -56,7 +56,7 @@ export default class ContactItem extends React.Component<ItemProps> {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <SeparatorLine height={1} width={screenWidth} />
+                <SeparatorLine height={1} width={1} />
             </>
         );
     }

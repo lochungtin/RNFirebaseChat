@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { ScrollView, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { showMessage } from 'react-native-flash-message';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,7 +12,7 @@ import InfoTextInput from '../components/InfoTextInput';
 import SeparatorLine from '../components/SeparatorLine';
 
 import { theme } from '../data/color';
-import { AccountScreenStyles, ScreenStyles, screenWidth } from './styles';
+import { AccountScreenStyles, ScreenStyles } from './styles';
 
 import { changePswd } from '../firebase/auth';
 import { firebaseSetAccInfo } from '../firebase/data';
@@ -47,7 +47,6 @@ class Screen extends React.Component<NavProps & ReduxProps> {
     }
 
     close = () => this.setState({ editMode: '' });
-
 
     modalContent = () => {
         switch (this.state.editMode) {
@@ -96,7 +95,6 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                 return <View />;
         }
     }
-
 
     update = (text: string, field: number) => {
         let payload: AccountInfoType = {
@@ -184,43 +182,47 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={AccountScreenStyles.pfpStack}>
-                    <View style={AccountScreenStyles.pfpContainer}>
-                        <View style={tempPfp}>
-                            <Icon
-                                color={theme.textLightC}
-                                name='account'
-                                size={100}
-                            />
+                <ScrollView>
+                    <View style={ScreenStyles.scrollView}>
+                        <View style={AccountScreenStyles.pfpStack}>
+                            <View style={AccountScreenStyles.pfpContainer}>
+                                <View style={tempPfp}>
+                                    <Icon
+                                        color={theme.textLightC}
+                                        name='account'
+                                        size={100}
+                                    />
+                                </View>
+                            </View>
+                            <TouchableOpacity onPress={() => { }} style={{ ...AccountScreenStyles.pfpEditBtn, backgroundColor: theme.accent }}>
+                                <Icon
+                                    color={theme.textLightC}
+                                    name='pencil'
+                                    size={20}
+                                />
+                            </TouchableOpacity>
                         </View>
-                    </View>
-                    <TouchableOpacity onPress={() => { }} style={{ ...AccountScreenStyles.pfpEditBtn, backgroundColor: theme.accent }}>
-                        <Icon
-                            color={theme.textLightC}
-                            name='pencil'
-                            size={20}
+                        <SeparatorLine width={0.8} />
+                        <AccountInfoItem
+                            details={this.props.account.info?.displayName || ''}
+                            iconName='account'
+                            onEdit={() => this.setState({ editMode: 'n' })}
+                            title='DISPLAY NAME'
                         />
-                    </TouchableOpacity>
-                </View>
-                <SeparatorLine width={screenWidth * 0.8} />
-                <AccountInfoItem
-                    details={this.props.account.info?.displayName || ''}
-                    iconName='account'
-                    onEdit={() => this.setState({ editMode: 'n' })}
-                    title='DISPLAY NAME'
-                />
-                <AccountInfoItem
-                    details={this.props.account.info?.bio || ''}
-                    iconName='comment-text-outline'
-                    onEdit={() => this.setState({ editMode: 'b' })}
-                    title='BIO'
-                />
-                <AccountInfoItem
-                    details='*********'
-                    iconName='lock'
-                    onEdit={() => this.setState({ editMode: 'p' })}
-                    title='PASSWORD'
-                />
+                        <AccountInfoItem
+                            details={this.props.account.info?.bio || ''}
+                            iconName='comment-text-outline'
+                            onEdit={() => this.setState({ editMode: 'b' })}
+                            title='BIO'
+                        />
+                        <AccountInfoItem
+                            details='*********'
+                            iconName='lock'
+                            onEdit={() => this.setState({ editMode: 'p' })}
+                            title='PASSWORD'
+                        />
+                    </View>
+                </ScrollView>
                 <Modal
                     backdropOpacity={0}
                     isVisible={this.state.editMode !== ''}

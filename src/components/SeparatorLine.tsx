@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Dimensions, View } from 'react-native';
 
 import { theme } from '../data/color';
 
@@ -17,7 +17,7 @@ export default class SeparatorLine extends React.Component<BarProps> {
 					...this.props.style,
 					backgroundColor: theme.separatorC,
 					height: this.props.height || 2,
-					width: this.props.width,
+					width: this.props.width * Dimensions.get('screen').width,
 				}}
 			/>
 		);
