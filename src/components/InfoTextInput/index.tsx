@@ -8,6 +8,7 @@ import { InfoTextInputStyle } from './styles';
 interface TextInputProps {
     hidden?: boolean,
     iconName: string,
+    notTop?: boolean,
     onChangeText?: (text: string) => void,
     onConfirm?: (text: string) => void,
     placeholder: string,
@@ -39,6 +40,7 @@ export default class InfoTextInput extends React.Component<TextInputProps> {
                 ...InfoTextInputStyle.rootContainer,
                 backgroundColor: theme.backgroundC,
                 borderColor: theme.accent,
+                borderTopWidth: this.props.notTop ? 0 : 6,
             }}>
                 <Icon
                     color={theme.textDisabledC}
@@ -47,7 +49,7 @@ export default class InfoTextInput extends React.Component<TextInputProps> {
                 />
                 <TextInput
                     autoCapitalize='none'
-                    autoFocus={true}
+                    autoFocus={!this.props.notTop && true}
                     placeholder={this.props.placeholder}
                     placeholderTextColor={theme.textDisabledC}
                     onChangeText={this.onChangeText}
@@ -57,13 +59,21 @@ export default class InfoTextInput extends React.Component<TextInputProps> {
                         color: theme.textC,
                     }}
                 />
-                <TouchableOpacity onPress={this.onConfirm}>
+                {this.props.onConfirm ?
+                    <TouchableOpacity onPress={this.onConfirm}>
+                        <Icon
+                            color={theme.textDisabledC}
+                            name='check'
+                            size={30}
+                        />
+                    </TouchableOpacity>
+                    :
                     <Icon
-                        color={theme.textDisabledC}
+                        color={'transparent'}
                         name='check'
                         size={30}
                     />
-                </TouchableOpacity>
+                }
             </View>
         );
     }
