@@ -101,7 +101,8 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
             let val: ContactMap = res.val();
 
-            console.log(val);
+            if (val === null && Object.keys(this.props.contacts).length > 0)
+                return store.dispatch(setContactList({}));
 
             let keyList: Array<string> = Object.keys(this.props.contacts);
             let keyListIn: Array<string> = Object.keys(val || {});
