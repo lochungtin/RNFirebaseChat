@@ -1,7 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { RNCamera } from 'react-native-camera';
 import { FloatingAction } from "react-native-floating-action";
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,7 +17,7 @@ import { HomeScreenStyles, ScreenStyles } from './styles';
 import { signOut } from '../firebase/auth';
 import firebaseConfig from '../firebase/config';
 import { firebaseAddFriends, firebaseFetchContacts, } from '../firebase/data';
-import { logout, setContactList } from '../redux/action';
+import { logout } from '../redux/action';
 import { store } from '../redux/store';
 import { ContactMap, ContactType, MessageMap, ReduxAccountType } from '../types';
 
@@ -47,7 +46,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
 
     modalContent = () => {
         switch (this.state.modalMode) {
-            case 'code':
+            case 'qrcode':
                 return (
                     <View style={{ ...HomeScreenStyles.popupContainer, backgroundColor: theme.accentFade }}>
                         <Text style={{ ...HomeScreenStyles.scanMeText, color: theme.textC }}>
@@ -63,7 +62,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </View>
                 );
-            case 'scan':
+            case 'camera':
                 return (
                     <QRCodeScanner
                         cameraStyle={{
@@ -101,45 +100,8 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
             let val: ContactMap = res.val();
 
-            if (val === null && Object.keys(this.props.contacts).length > 0)
-                return store.dispatch(setContactList({}));
-
-            let keyList: Array<string> = Object.keys(this.props.contacts);
-            let keyListIn: Array<string> = Object.keys(val || {});
-
-            if (keyList.length !== keyListIn.length)
-                return store.dispatch(setContactList(val));
-
-            for (let i = 0; i < keyList.length; ++i) {
-                if (keyList[i] !== keyListIn[i])
-                    return store.dispatch(setContactList(val));
-            }
+            console.log(val);
         });
-
-        let action: Array<any> = [
-            {
-                color: theme.accent,
-                icon: <Icon
-                    color={theme.textLightC}
-                    name='qrcode'
-                    size={20}
-                />,
-                name: 'code',
-                text: 'MY QR CODE',
-                textColor: theme.textC,
-            },
-            {
-                color: theme.accent,
-                icon: <Icon
-                    color={theme.textLightC}
-                    name='camera'
-                    size={20}
-                />,
-                name: 'scan',
-                text: 'SCANNER',
-                textColor: theme.textC,
-            },
-        ];
 
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
@@ -177,7 +139,19 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     <View style={{ height: 40 }} />
                 </ScrollView>
                 <FloatingAction
-                    actions={action}
+                    actions={[
+                        { name: 'qrcode', text: 'MY QR CODE' },
+                        { name: 'camera', text: 'SCANNER' }
+                    ].map(elem => ({
+                        ...elem,
+                        color: theme.accent,
+                        icon: <Icon
+                            color={theme.textLightC}
+                            name='qrcode'
+                            size={20}
+                        />,
+                        textColor: theme.textC,
+                    }))}
                     color={theme.accent}
                     onPressItem={(modalMode: string | undefined) => this.setState({ modalMode: modalMode || '' })}
                     overlayColor='#00000020'
@@ -201,8 +175,6 @@ class Screen extends React.Component<NavProps & ReduxProps> {
 
 const mapStateToProps = (state: ReduxProps) => ({
     account: state.account,
-    contacts: state.contacts,
-    messages: state.messages,
 });
 
 export default connect(mapStateToProps)(Screen);

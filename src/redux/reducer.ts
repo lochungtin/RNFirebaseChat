@@ -23,24 +23,6 @@ const updateAccount = (accountState = defaultAccountState, action: ReduxActionTy
     }
 }
 
-const defaultContactState: ContactMap = {};
-const updateContacts = (contactState = defaultContactState, action: ReduxActionType) =>
-    action.type === ActionName.SET_CONTACT_LIST ? action.payload : contactState
-
-const defaultLastMessageState: MessageMap = {};
-const updateLastMessages = (messagesState = defaultLastMessageState, action: ReduxActionType) => {
-    let update = { ...messagesState };
-
-    if (action.type === ActionName.SET_LAST_MESSAGE) {
-        update[action.payload.key] = action.payload.payload;
-        return update;
-    }
-    else
-        return messagesState;
-}
-
 export default combineReducers({
     account: updateAccount,
-    contacts: updateContacts,
-    messages: updateLastMessages,
 });

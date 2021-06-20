@@ -18,16 +18,6 @@ export const logout = () => ({
     type: ActionName.LOGOUT,
 });
 
-export const setContactList = (payload: ContactMap) => ({
-    type: ActionName.SET_CONTACT_LIST,
-    payload,
-});
-
-export const setLastMessage = (payload: {uid: string, message: MessageType}) => ({
-    type: ActionName.SET_LAST_MESSAGE,
-    payload,
-});
-
 export const updateAccInfo = (payload: AccountInfoType) => ({
     type: ActionName.UPDATE_ACCOUNT_INFO,
     payload,
