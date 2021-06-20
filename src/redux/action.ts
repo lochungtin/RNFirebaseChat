@@ -1,11 +1,8 @@
-import { MessageType } from "react-native-flash-message";
-import { AccountInfoType, ContactMap, ContactType, FirebaseAccountType } from "../types";
+import { AccountInfoType, FirebaseAccountType } from "../types";
 
 export enum ActionName {
     LOGIN,
     LOGOUT,
-    SET_CONTACT_LIST,
-    SET_LAST_MESSAGE,
     UPDATE_ACCOUNT_INFO,
 }
 

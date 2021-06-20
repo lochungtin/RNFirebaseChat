@@ -32,16 +32,6 @@ export interface ThemeType {
     textLightC: string,
 }
 
-// contact type
-export interface ContactType {
-    displayName: string,
-    uid: string,
-}
-
-export interface ContactMap {
-    [key: string]: ContactType,
-}
-
 // message type
 export interface MessageType {
     isSender: boolean,

@@ -19,7 +19,7 @@ import firebaseConfig from '../firebase/config';
 import { firebaseAddFriends, firebaseFetchContacts, } from '../firebase/data';
 import { logout } from '../redux/action';
 import { store } from '../redux/store';
-import { ContactMap, ContactType, MessageMap, ReduxAccountType } from '../types';
+import { MessageMap, ReduxAccountType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -27,8 +27,6 @@ interface NavProps {
 
 interface ReduxProps {
     account: ReduxAccountType,
-    contacts: ContactMap,
-    messages: MessageMap,
 }
 
 class Screen extends React.Component<NavProps & ReduxProps> {
@@ -54,10 +52,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         </Text>
                         <QRCode
                             backgroundColor={theme.accentFade}
-                            value={JSON.stringify({
-                                displayName: this.props.account.info?.displayName,
-                                uid: this.props.account.firebase?.uid
-                            })}
+                            value={this.props.account.firebase?.uid}
                             size={200}
                         />
                     </View>
@@ -85,20 +80,13 @@ class Screen extends React.Component<NavProps & ReduxProps> {
     }
 
     onScan = (event: any) => {
-        let friend: ContactType = JSON.parse(event.data);
-        let me: ContactType = {
-            displayName: this.props.account.info?.displayName || '',
-            uid: this.props.account.firebase?.uid || '',
-        };
-
-        firebaseAddFriends(me, friend);
-
+        firebaseAddFriends(this.props.account.firebase?.uid || '', event.data);
         this.setState({ modalMode: '' });
     }
 
     render() {
         firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
-            let val: ContactMap = res.val();
+            let val: any = res.val();
 
             console.log(val);
         });
@@ -123,19 +111,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-                    {Object.keys(this.props.contacts || {}).map(key => {
-                        let contact = this.props.contacts[key];
-                        let message = this.props.messages[key];
-                        return (
-                            <ContactItem
-                                key={contact.uid}
-                                contact={contact}
-                                message={message}
-                                onPress={() => this.props.navigation.navigate('chat', contact)}
-                                onPressPic={() => this.props.navigation.navigate('accV', contact)}
-                            />
-                        );
-                    })}
+
                     <View style={{ height: 40 }} />
                 </ScrollView>
                 <FloatingAction

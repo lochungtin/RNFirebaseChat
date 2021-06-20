@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ContactMap, ContactType, MessageMap, ReduxAccountType, ReduxActionType } from '../types';
+import { ReduxAccountType, ReduxActionType } from '../types';
 import { ActionName } from './action';
 
 const defaultAccountState: ReduxAccountType = {

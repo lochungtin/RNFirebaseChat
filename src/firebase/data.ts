@@ -1,6 +1,6 @@
 import { showMessage } from 'react-native-flash-message';
 import { theme } from '../data/color';
-import { AccountInfoType, ContactType } from '../types';
+import { AccountInfoType } from '../types';
 
 import firebaseConfig from './config';
 
@@ -33,11 +33,11 @@ export const firebaseSetAccInfo = (uid: string, payload: AccountInfoType, callba
         .ref(`/UserData/${uid}/accountInfo/`)
         .set(payload, callback);
 
-export const firebaseAddFriends = (partyA: ContactType, partyB: ContactType, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
+export const firebaseAddFriends = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
     let update: any = {};
 
-    update[`/UserData/${partyA.uid}/contacts/${partyB.uid}`] = partyB;
-    update[`/UserData/${partyB.uid}/contacts/${partyA.uid}`] = partyA;
+    update[`/UserData/${partyA}/contacts/${partyB}`] = '';
+    update[`/UserData/${partyB}/contacts/${partyA}`] = '';
 
     db.ref().update(update, callback);
 }
