@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import AccountInfoItem from '../components/AccountInfoItem';
@@ -10,13 +10,17 @@ import SeparatorLine from '../components/SeparatorLine';
 import { theme } from '../data/color';
 import { ScreenStyles, AccountScreenStyles } from './styles';
 
+import { firebaseClearChat, firebaseRemoveFriend } from '../firebase/data';
+import { ReduxAccountType } from '../types';
+import { connect } from 'react-redux';
+
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
     route: any,
 }
 
-interface ScreenProps {
-
+interface ReduxProps {
+    account: ReduxAccountType
 }
 
 const tempPfp: StyleProp<ViewStyle> = {
@@ -29,7 +33,13 @@ const tempPfp: StyleProp<ViewStyle> = {
     width: 160,
 };
 
-export default class Screen extends React.Component<NavProps & ScreenProps> {
+class Screen extends React.Component<NavProps & ReduxProps> {
+
+    removeFriend = () => {
+        firebaseRemoveFriend(this.props.account.firebase?.uid || '', this.props.route.params.uid);
+        this.props.navigation.goBack();
+    }
+
     render() {
         console.log(this.props.route);
         return (
@@ -68,7 +78,43 @@ export default class Screen extends React.Component<NavProps & ScreenProps> {
                 />
                 <View style={{ height: 40 }} />
                 <SeparatorLine width={0.8} />
+                <TouchableOpacity onPress={() => firebaseClearChat(this.props.account.firebase?.uid || '', this.props.route.params.uid)} style={AccountScreenStyles.removeFriendContainer}>
+                    <Icon
+                        color={theme.textWarnC}
+                        name='comment-remove-outline'
+                        size={35}
+                    />
+                    <Text style={{ ...AccountScreenStyles.removeFriendText, color: theme.textWarnC }}>
+                        CLEAR CHAT
+                    </Text>
+                    <Icon
+                        color='transparent'
+                        name='cancel'
+                        size={35}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.removeFriend} style={AccountScreenStyles.removeFriendContainer}>
+                    <Icon
+                        color={theme.textWarnC}
+                        name='cancel'
+                        size={35}
+                    />
+                    <Text style={{ ...AccountScreenStyles.removeFriendText, color: theme.textWarnC }}>
+                        REMOVE FRIEND
+                    </Text>
+                    <Icon
+                        color='transparent'
+                        name='cancel'
+                        size={35}
+                    />
+                </TouchableOpacity>
             </View>
         );
     }
 }
+
+const mapStateToProps = (state: ReduxProps) => ({
+    account: state.account,
+});
+
+export default connect(mapStateToProps)(Screen);

@@ -30,6 +30,7 @@ export interface ThemeType {
     textC: string,
     textDisabledC: string,
     textLightC: string,
+    textWarnC: string,
 }
 
 // contact type

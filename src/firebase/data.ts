@@ -6,6 +6,7 @@ import firebaseConfig from './config';
 
 const db: firebaseConfig.database.Database = firebaseConfig.database();
 
+// error callback
 export const firebaseDefaultErrorCallback = (err: Error | null) => {
     if (err)
         showMessage({
@@ -16,22 +17,24 @@ export const firebaseDefaultErrorCallback = (err: Error | null) => {
         });
 }
 
+// account related actions
 export const firebaseFetchAccInfo = async (uid: string) =>
     db
         .ref(`/UserData/${uid}/accountInfo/`)
         .once('value')
         .then((snapshot: firebaseConfig.database.DataSnapshot) => snapshot.val());
 
+export const firebaseSetAccInfo = (uid: string, payload: AccountInfoType, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) =>
+    db
+        .ref(`/UserData/${uid}/accountInfo/`)
+        .set(payload, callback);
+
+// contacts and friends related actions
 export const firebaseFetchContacts = async (uid: string, callback: (response: firebaseConfig.database.DataSnapshot) => void) => {
     let ref = db.ref(`/UserData/${uid}/contacts/`);
     ref.off();
     ref.on('value', callback);
 }
-
-export const firebaseSetAccInfo = (uid: string, payload: AccountInfoType, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) =>
-    db
-        .ref(`/UserData/${uid}/accountInfo/`)
-        .set(payload, callback);
 
 export const firebaseAddFriends = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
     let update: any = {};
@@ -42,8 +45,32 @@ export const firebaseAddFriends = (partyA: string, partyB: string, callback: ((e
     db.ref().update(update, callback);
 }
 
+export const firebaseRemoveFriend = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
+    let update: any = {};
+
+    // delete contact
+    update[`/UserData/${partyA}/contacts/${partyB}`] = null;
+    update[`/UserData/${partyB}/contacts/${partyA}`] = null;
+
+    // delete chat
+    update[`/UserData/${partyA}/messages/${partyB}`] = null;
+    update[`/UserData/${partyB}/messages/${partyA}`] = null;
+
+    db.ref().update(update, callback);
+}
+
+// message related actions
 export const firebaseFetchMsgInfo = async (uid: string, mid: string) =>
     db
         .ref(`/UserData/${uid}/messages/${mid}`)
         .once('value')
         .then((snapshot: firebaseConfig.database.DataSnapshot) => snapshot.val());
+
+export const firebaseClearChat = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
+    let update: any = {};
+
+    update[`/UserData/${partyA}/messages/${partyB}`] = null;
+    update[`/UserData/${partyB}/messages/${partyA}`] = null;
+
+    db.ref().update(update, callback);
+}

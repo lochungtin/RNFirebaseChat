@@ -158,4 +158,17 @@ export const AccountScreenStyles = StyleSheet.create({
         margin: 0,
         padding: 0,
     },
+    removeFriendContainer: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 40,
+        width: screenWidth * 0.8,
+    },
+    removeFriendText: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        width: screenWidth * 0.5,
+    },
 });

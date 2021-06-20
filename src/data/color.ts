@@ -9,4 +9,5 @@ export const theme: ThemeType = {
     textC: '#1c1c1c',
     textDisabledC: '#969696',
     textLightC: '#f5f2eb',
+    textWarnC: '#ff4529',
 }

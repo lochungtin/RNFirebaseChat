@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { FloatingAction } from "react-native-floating-action";
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -33,34 +33,21 @@ interface ScreenState {
     contacts: Array<ContactType>
     messages: MessageMap,
     modalMode: string,
+    refreshing: boolean,
 }
 
 class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
     constructor(props: NavProps & ReduxProps) {
         super(props);
-        firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
-            let contacts: { [key: string]: string } = res.val();
-            Object.keys(contacts).forEach(((uid: string) => {
-                firebaseFetchAccInfo(uid).then((contact: AccountInfoType) =>
-                    this.setState({ contacts: [...this.state.contacts, { ...contact, uid }] }));
-
-                let mid = contacts[uid];
-                if (mid)
-                    firebaseFetchMsgInfo(uid, mid).then((message: MessageType) => {
-                        let messages: MessageMap = { ...this.state.messages };
-                        messages[uid] = message;
-
-                        this.setState({ messages });
-                    });
-            }));
-        });
-
         this.state = {
             contacts: [],
             messages: {},
             modalMode: '',
+            refreshing: false,
         }
+
+        this.refresh();
     }
 
     close = () => this.setState({ modalMode: '' });
@@ -112,6 +99,28 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         this.setState({ modalMode: '' });
     }
 
+    refresh = () => firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
+        this.setState({ contacts: [], messages: {} });
+
+        let contacts: { [key: string]: string } = res.val();
+        if (contacts === null)
+            return this.setState({ contacts: [] });
+        Object.keys(contacts).forEach(((uid: string) => {
+            firebaseFetchAccInfo(uid).then((contact: AccountInfoType) =>
+                this.setState({ contacts: [...this.state.contacts, { ...contact, uid }] }));
+
+            let mid = contacts[uid];
+            if (mid)
+                firebaseFetchMsgInfo(uid, mid).then((message: MessageType) => {
+                    let messages: MessageMap = { ...this.state.messages };
+                    messages[uid] = message;
+
+                    this.setState({ messages });
+                });
+        }));
+    });
+
+
     render() {
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
@@ -132,10 +141,9 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                         />
                     </TouchableOpacity>
                 </View>
-                <ScrollView>
+                <ScrollView refreshControl={<RefreshControl onRefresh={this.refresh} refreshing={this.state.refreshing} />}>
                     {this.state.contacts.map((contact: ContactType) => {
                         let uid: string = contact.uid;
-
                         return (
                             <ContactItem
                                 contact={contact}
