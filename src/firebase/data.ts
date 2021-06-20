@@ -1,6 +1,6 @@
 import { showMessage } from 'react-native-flash-message';
 import { theme } from '../data/color';
-import { AccountInfoType } from '../types';
+import { AccountInfoType, ContactType } from '../types';
 
 import firebaseConfig from './config';
 
@@ -16,12 +16,6 @@ export const firebaseDefaultErrorCallback = (err: Error | null) => {
         });
 }
 
-
-export const firebaseSetAccInfo = (uid: string, payload: AccountInfoType, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) =>
-    db
-        .ref(`/UserData/${uid}/accountInfo/`)
-        .set(payload, callback);
-
 export const firebaseFetchAccInfo = async (uid: string) =>
     db
         .ref(`/UserData/${uid}/accountInfo/`)
@@ -32,4 +26,18 @@ export const firebaseFetchContacts = async (uid: string, callback: (response: fi
     let ref = db.ref(`/UserData/${uid}/contacts/`);
     ref.off();
     ref.on('value', callback);
+}
+
+export const firebaseSetAccInfo = (uid: string, payload: AccountInfoType, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) =>
+    db
+        .ref(`/UserData/${uid}/accountInfo/`)
+        .set(payload, callback);
+
+export const firebaseAddFriends = (partyA: ContactType, partyB: ContactType, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
+    let update: any = {};
+
+    update[`/UserData/${partyA.uid}/contacts/${partyB.uid}`] = partyB;
+    update[`/UserData/${partyB.uid}/contacts/${partyA.uid}`] = partyA;
+
+    db.ref().update(update, callback);
 }

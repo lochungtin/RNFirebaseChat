@@ -17,10 +17,10 @@ import { HomeScreenStyles, ScreenStyles } from './styles';
 
 import { signOut } from '../firebase/auth';
 import firebaseConfig from '../firebase/config';
-import { firebaseFetchContacts } from '../firebase/data';
+import { firebaseAddFriends, firebaseFetchContacts, } from '../firebase/data';
 import { logout, setContactList } from '../redux/action';
 import { store } from '../redux/store';
-import { ContactMap, MessageMap, ReduxAccountType } from '../types';
+import { ContactMap, ContactType, MessageMap, ReduxAccountType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -55,9 +55,9 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         </Text>
                         <QRCode
                             backgroundColor={theme.accentFade}
-                            value={JSON.stringify({ 
-                                displayName: this.props.account.info?.displayName, 
-                                uid: this.props.account.firebase?.uid 
+                            value={JSON.stringify({
+                                displayName: this.props.account.info?.displayName,
+                                uid: this.props.account.firebase?.uid
                             })}
                             size={200}
                         />
@@ -86,7 +86,15 @@ class Screen extends React.Component<NavProps & ReduxProps> {
     }
 
     onScan = (event: any) => {
-        console.log(JSON.parse(event.data));
+        let friend: ContactType = JSON.parse(event.data);
+        let me: ContactType = {
+            displayName: this.props.account.info?.displayName || '',
+            uid: this.props.account.firebase?.uid || '',
+        };
+
+        firebaseAddFriends(me, friend);
+
+        this.setState({ modalMode: '' });
     }
 
     render() {

@@ -35,7 +35,6 @@ export interface ThemeType {
 // contact type
 export interface ContactType {
     displayName: string,
-    pinned: boolean,
     uid: string,
 }
 
