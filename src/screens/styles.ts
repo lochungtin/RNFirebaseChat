@@ -92,6 +92,28 @@ export const HomeScreenStyles = StyleSheet.create({
     headerIcon: {
         marginLeft: 20,
     },
+    modalRoot: {
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 0,
+        margin: 0,
+    },
+    popupContainer: {
+        alignItems: 'center',
+        borderRadius: 20,
+        display: 'flex',
+        elevation: 20,
+        flexDirection: 'column',
+        height: 310,
+        justifyContent: 'space-between',
+        paddingVertical: 30,
+        width: 260,
+    },
+    scanMeText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
 });
 
 export const AccountScreenStyles = StyleSheet.create({

@@ -1,9 +1,12 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { RNCamera } from 'react-native-camera';
 import { FloatingAction } from "react-native-floating-action";
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import QRCode from 'react-native-qrcode-svg';
 import { connect } from 'react-redux';
 
 import ContactItem from '../components/ContactItem';
@@ -41,12 +44,46 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         signOut();
     }
 
+    modalContent = () => {
+        switch (this.state.modalMode) {
+            case 'code':
+                return (
+                    <View style={{ ...HomeScreenStyles.popupContainer, backgroundColor: theme.accentFade }}>
+                        <Text style={{ ...HomeScreenStyles.scanMeText, color: theme.textC }}>
+                            SCAN ME
+                        </Text>
+                        <QRCode
+                            backgroundColor={theme.accentFade}
+                            value={this.props.account.firebase?.uid}
+                            size={200}
+                        />
+                    </View>
+                );
+            case 'scan':
+                return (
+                    <QRCodeScanner
+                        onRead={console.log}
+                        cameraStyle={{
+                            width: 300,
+                        }}
+                        containerStyle={{
+                            alignItems: 'center',
+                            borderRadius: 20,
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                    />
+                );
+            default:
+                return <View />;
+        }
+    }
+
     render() {
         firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
             let val: ContactMap = res.val();
 
-            if (val === null)
-                store.dispatch(setContactList({}));
+            console.log(val);
 
             let keyList: Array<string> = Object.keys(this.props.contacts);
             let keyListIn: Array<string> = Object.keys(val || {});
@@ -122,7 +159,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     actions={action}
                     color={theme.accent}
                     onPressItem={(modalMode: string | undefined) => this.setState({ modalMode: modalMode || '' })}
-                    overlayColor='#000000A0'
+                    overlayColor='#00000020'
                 />
                 <Modal
                     backdropOpacity={0}
@@ -131,9 +168,10 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     onBackdropPress={this.close}
                     onSwipeComplete={this.close}
                     propagateSwipe={true}
+                    style={HomeScreenStyles.modalRoot}
                     swipeDirection='down'
                 >
-
+                    {this.modalContent()}
                 </Modal>
             </View>
         );
