@@ -1,9 +1,11 @@
+import { MessageType } from "react-native-flash-message";
 import { AccountInfoType, ContactMap, ContactType, FirebaseAccountType } from "../types";
 
 export enum ActionName {
     LOGIN,
     LOGOUT,
     SET_CONTACT_LIST,
+    SET_LAST_MESSAGE,
     UPDATE_ACCOUNT_INFO,
 }
 
@@ -18,6 +20,11 @@ export const logout = () => ({
 
 export const setContactList = (payload: ContactMap) => ({
     type: ActionName.SET_CONTACT_LIST,
+    payload,
+});
+
+export const setLastMessage = (payload: {uid: string, message: MessageType}) => ({
+    type: ActionName.SET_LAST_MESSAGE,
     payload,
 });
 

@@ -20,7 +20,7 @@ import firebaseConfig from '../firebase/config';
 import { firebaseFetchContacts } from '../firebase/data';
 import { logout, setContactList } from '../redux/action';
 import { store } from '../redux/store';
-import { ContactMap, ReduxAccountType } from '../types';
+import { ContactMap, MessageMap, ReduxAccountType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -29,6 +29,7 @@ interface NavProps {
 interface ReduxProps {
     account: ReduxAccountType,
     contacts: ContactMap,
+    messages: MessageMap,
 }
 
 class Screen extends React.Component<NavProps & ReduxProps> {
@@ -54,7 +55,10 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         </Text>
                         <QRCode
                             backgroundColor={theme.accentFade}
-                            value={this.props.account.firebase?.uid}
+                            value={JSON.stringify({ 
+                                displayName: this.props.account.info?.displayName, 
+                                uid: this.props.account.firebase?.uid 
+                            })}
                             size={200}
                         />
                     </View>
@@ -62,7 +66,6 @@ class Screen extends React.Component<NavProps & ReduxProps> {
             case 'scan':
                 return (
                     <QRCodeScanner
-                        onRead={console.log}
                         cameraStyle={{
                             width: 300,
                         }}
@@ -72,11 +75,18 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                             display: 'flex',
                             justifyContent: 'center',
                         }}
+                        markerStyle={{ borderColor: theme.accent }}
+                        onRead={this.onScan}
+                        showMarker={true}
                     />
                 );
             default:
                 return <View />;
         }
+    }
+
+    onScan = (event: any) => {
+        console.log(JSON.parse(event.data));
     }
 
     render() {
@@ -144,10 +154,12 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                 <ScrollView>
                     {Object.keys(this.props.contacts || {}).map(key => {
                         let contact = this.props.contacts[key];
+                        let message = this.props.messages[key];
                         return (
                             <ContactItem
                                 key={contact.uid}
                                 contact={contact}
+                                message={message}
                                 onPress={() => this.props.navigation.navigate('chat', contact)}
                                 onPressPic={() => this.props.navigation.navigate('accV', contact)}
                             />
@@ -181,6 +193,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
 const mapStateToProps = (state: ReduxProps) => ({
     account: state.account,
     contacts: state.contacts,
+    messages: state.messages,
 });
 
 export default connect(mapStateToProps)(Screen);

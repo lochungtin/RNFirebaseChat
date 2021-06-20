@@ -2,14 +2,16 @@ import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import SeparatorLine from '../SeparatorLine';
+
 import { theme } from '../../data/color';
 import { ContactItemStyles } from './styles';
 
-import { ContactType } from '../../types';
-import SeparatorLine from '../SeparatorLine';
+import { ContactType, MessageType } from '../../types';
 
 interface ItemProps {
     contact: ContactType,
+    message: MessageType,
     onPress: () => void,
     onPressPic: () => void,
 }
@@ -34,12 +36,14 @@ const tempPfp = (
 
 export default class ContactItem extends React.Component<ItemProps> {
     render() {
-        let message: string = this.props.contact.lastMessage.isSender ? 'You' : this.props.contact.displayName;
-        
-        message += `: ${this.props.contact.lastMessage.content}`;
+        let message: string = '';
+        if (this.props.message) {
+            message = this.props.message.isSender ? 'You' : this.props.contact.displayName;
+            message += `: ${this.props.message.content}`;
 
-        if (message.length > 32)
-            message = message.substring(0, 32) + '...';
+            if (message.length > 32)
+                message = message.substring(0, 32) + '...';
+        }
 
         return (
             <>

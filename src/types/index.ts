@@ -35,7 +35,6 @@ export interface ThemeType {
 // contact type
 export interface ContactType {
     displayName: string,
-    lastMessage: MessageType,
     pinned: boolean,
     uid: string,
 }
@@ -49,4 +48,8 @@ export interface MessageType {
     isSender: boolean,
     content: string,
     timestamp: number,
+}
+
+export interface MessageMap {
+    [key: string]: MessageType,
 }
