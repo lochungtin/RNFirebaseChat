@@ -125,7 +125,7 @@ export const AccountScreenStyles = StyleSheet.create({
     },
     pfpStack: {
         height: 160,
-        marginBottom: 60,
+        marginBottom: 40,
         marginTop: 60,
         width: 160,
     },

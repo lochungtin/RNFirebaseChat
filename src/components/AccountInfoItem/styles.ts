@@ -9,7 +9,7 @@ export const AccountInfoItemStyles = StyleSheet.create({
         flexDirection: 'row',
         minHeight: 50,
         justifyContent: 'space-between',
-        marginTop: 40,
+        marginTop: 30,
         width: screenWidth * 0.8,
     },
     textContainer: {

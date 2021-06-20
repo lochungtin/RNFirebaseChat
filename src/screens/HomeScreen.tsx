@@ -142,7 +142,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                                 key={uid}
                                 message={this.state.messages[uid]}
                                 onPress={() => this.props.navigation.navigate('chat', uid)}
-                                onPressPic={() => this.props.navigation.navigate('chat', contact)}
+                                onPressPic={() => this.props.navigation.navigate('accV', contact)}
                             />
                         );
                     })}

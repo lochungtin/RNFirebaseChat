@@ -23,20 +23,28 @@ export default class AccountInfoItem extends React.Component<InfoProps> {
                     size={30}
                 />
                 <View style={AccountInfoItemStyles.textContainer}>
-                    <Text style={{...AccountInfoItemStyles.titleText, color: theme.textDisabledC}}>
+                    <Text style={{ ...AccountInfoItemStyles.titleText, color: theme.textDisabledC }}>
                         {this.props.title}
                     </Text>
-                    <Text style={{...AccountInfoItemStyles.infoText, color: theme.textC}}>
+                    <Text style={{ ...AccountInfoItemStyles.infoText, color: theme.textC }}>
                         {this.props.details}
                     </Text>
                 </View>
-                {this.props.onEdit && <TouchableOpacity onPress={this.props.onEdit}>
+                {this.props.onEdit ?
+                    <TouchableOpacity onPress={this.props.onEdit}>
+                        <Icon
+                            color={theme.accent}
+                            name='pencil'
+                            size={25}
+                        />
+                    </TouchableOpacity>
+                    :
                     <Icon
-                        color={theme.accent}
+                        color='transparent'
                         name='pencil'
                         size={25}
                     />
-                </TouchableOpacity>}
+                }
             </View>
         );
     }
