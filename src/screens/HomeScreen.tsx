@@ -16,10 +16,10 @@ import { HomeScreenStyles, ScreenStyles } from './styles';
 
 import { signOut } from '../firebase/auth';
 import firebaseConfig from '../firebase/config';
-import { firebaseAddFriends, firebaseFetchContacts, } from '../firebase/data';
+import { firebaseAddFriends, firebaseFetchAccInfo, firebaseFetchContacts, firebaseFetchMsgInfo, } from '../firebase/data';
 import { logout } from '../redux/action';
 import { store } from '../redux/store';
-import { MessageMap, ReduxAccountType } from '../types';
+import { AccountInfoType, ContactType, MessageMap, MessageType, ReduxAccountType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -29,10 +29,38 @@ interface ReduxProps {
     account: ReduxAccountType,
 }
 
-class Screen extends React.Component<NavProps & ReduxProps> {
+interface ScreenState {
+    contacts: Array<ContactType>
+    messages: MessageMap,
+    modalMode: string,
+}
 
-    state = {
-        modalMode: '',
+class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
+
+    constructor(props: NavProps & ReduxProps) {
+        super(props);
+        firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
+            let contacts: { [key: string]: string } = res.val();
+            Object.keys(contacts).forEach(((uid: string) => {
+                firebaseFetchAccInfo(uid).then((contact: AccountInfoType) =>
+                    this.setState({ contacts: [...this.state.contacts, { ...contact, uid }] }));
+
+                let mid = contacts[uid];
+                if (mid)
+                    firebaseFetchMsgInfo(uid, mid).then((message: MessageType) => {
+                        let messages: MessageMap = { ...this.state.messages };
+                        messages[uid] = message;
+
+                        this.setState({ messages });
+                    });
+            }));
+        });
+
+        this.state = {
+            contacts: [],
+            messages: {},
+            modalMode: '',
+        }
     }
 
     close = () => this.setState({ modalMode: '' });
@@ -85,12 +113,6 @@ class Screen extends React.Component<NavProps & ReduxProps> {
     }
 
     render() {
-        firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
-            let val: any = res.val();
-
-            console.log(val);
-        });
-
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
@@ -111,7 +133,19 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
+                    {this.state.contacts.map((contact: ContactType) => {
+                        let uid: string = contact.uid;
 
+                        return (
+                            <ContactItem
+                                contact={contact}
+                                key={uid}
+                                message={this.state.messages[uid]}
+                                onPress={() => this.props.navigation.navigate('chat', uid)}
+                                onPressPic={() => this.props.navigation.navigate('chat', contact)}
+                            />
+                        );
+                    })}
                     <View style={{ height: 40 }} />
                 </ScrollView>
                 <FloatingAction

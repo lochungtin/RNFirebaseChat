@@ -11,7 +11,7 @@ import { ContactType, MessageType } from '../../types';
 
 interface ItemProps {
     contact: ContactType,
-    message: MessageType,
+    message: MessageType | undefined,
     onPress: () => void,
     onPressPic: () => void,
 }

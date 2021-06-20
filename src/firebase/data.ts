@@ -41,3 +41,9 @@ export const firebaseAddFriends = (partyA: string, partyB: string, callback: ((e
 
     db.ref().update(update, callback);
 }
+
+export const firebaseFetchMsgInfo = async (uid: string, mid: string) =>
+    db
+        .ref(`/UserData/${uid}/messages/${mid}`)
+        .once('value')
+        .then((snapshot: firebaseConfig.database.DataSnapshot) => snapshot.val());
