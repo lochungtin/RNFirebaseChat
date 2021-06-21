@@ -123,6 +123,12 @@ export const AccountScreensStyles = StyleSheet.create({
         width: screenWidth * 0.90,
         zIndex: 2,
     },
+    pfpStackPositioner: {
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        width: screenWidth * 0.8,
+    },
     pfpStack: {
         height: 160,
         marginBottom: 40,

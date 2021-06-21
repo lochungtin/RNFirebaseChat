@@ -98,8 +98,10 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         this.setState({ modalMode: '' });
     }
 
-    refreshContent = () => firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) =>
-        this.setState({ contacts: Object.keys(res.val() || []) }));
+    refreshContent = () => {
+        firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) =>
+            this.setState({ contacts: Object.keys(res.val() || []) }));
+    }
 
     render() {
         console.log(this.state.contacts);

@@ -1,6 +1,7 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { RefreshControl, ScrollView, StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import AccountInfoItem from '../components/AccountInfoItem';
@@ -10,9 +11,9 @@ import SeparatorLine from '../components/SeparatorLine';
 import { theme } from '../data/color';
 import { ScreenStyles, AccountScreensStyles } from './styles';
 
-import { firebaseClearChat, firebaseRemoveFriend } from '../firebase/data';
-import { ReduxAccountType } from '../types';
-import { connect } from 'react-redux';
+import firebaseConfig from '../firebase/config';
+import { firebaseClearChat, firebaseFetchAccInfo, firebaseRemoveFriend } from '../firebase/data';
+import { AccountInfoType, ReduxAccountType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -21,6 +22,11 @@ interface NavProps {
 
 interface ReduxProps {
     account: ReduxAccountType
+}
+
+interface ScreenState {
+    account: AccountInfoType,
+    refreshing: boolean,
 }
 
 const tempPfp: StyleProp<ViewStyle> = {
@@ -33,10 +39,32 @@ const tempPfp: StyleProp<ViewStyle> = {
     width: 160,
 };
 
-class Screen extends React.Component<NavProps & ReduxProps> {
+class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
+
+    constructor(props: NavProps & ReduxProps) {
+        super(props);
+        this.state = {
+            account: {
+                displayName: '',
+                bio: '',
+            },
+            refreshing: false,
+        }
+
+        this.refreshContent();
+    }
+
+    refreshContent = () => firebaseFetchAccInfo(this.props.route.params, (res: firebaseConfig.database.DataSnapshot) => {
+        let account: AccountInfoType = res.val();
+
+        if (account === null)
+            return;
+
+        this.setState({ account });
+    });
 
     removeFriend = () => {
-        firebaseRemoveFriend(this.props.account.firebase?.uid || '', this.props.route.params.uid);
+        firebaseRemoveFriend(this.props.account.firebase?.uid || '', this.props.route.params);
         this.props.navigation.navigate('home');
     }
 
@@ -53,60 +81,65 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={AccountScreensStyles.pfpStack}>
-                    <View style={AccountScreensStyles.pfpContainer}>
-                        <View style={tempPfp}>
-                            <Icon
-                                color={theme.textLightC}
-                                name='account'
-                                size={100}
-                            />
+                <ScrollView refreshControl={<RefreshControl onRefresh={this.refreshContent} refreshing={this.state.refreshing} />}>
+                    <View style={AccountScreensStyles.pfpStackPositioner}>
+                        <View style={AccountScreensStyles.pfpStack}>
+                            <View style={AccountScreensStyles.pfpContainer}>
+                                <View style={tempPfp}>
+                                    <Icon
+                                        color={theme.textLightC}
+                                        name='account'
+                                        size={100}
+                                    />
+                                </View>
+                            </View>
                         </View>
                     </View>
-                </View>
-                <SeparatorLine width={0.8} />
-                <AccountInfoItem
-                    details={this.props.route.params.displayName}
-                    iconName='account'
-                    title='DISPLAY NAME'
-                />
-                <AccountInfoItem
-                    details={this.props.route.params.bio}
-                    iconName='comment-text-outline'
-                    title='BIO'
-                />
-                <View style={{ height: 40 }} />
-                <SeparatorLine width={0.8} />
-                <TouchableOpacity onPress={() => firebaseClearChat(this.props.account.firebase?.uid || '', this.props.route.params.uid)} style={AccountScreensStyles.removeFriendContainer}>
-                    <Icon
-                        color={theme.textWarnC}
-                        name='comment-remove-outline'
-                        size={35}
+                    <SeparatorLine width={0.8} />
+                    <AccountInfoItem
+                        details={this.state.account.displayName}
+                        iconName='account'
+                        title='DISPLAY NAME'
                     />
-                    <Text style={{ ...AccountScreensStyles.removeFriendText, color: theme.textWarnC }}>
-                        CLEAR CHAT
-                    </Text>
-                    <Icon
-                        color='transparent'
-                        name='cancel'
-                        size={35}
+                    <AccountInfoItem
+                        details={this.state.account.bio}
+                        iconName='comment-text-outline'
+                        title='BIO'
                     />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.removeFriend} style={AccountScreensStyles.removeFriendContainer}>
-                    <Icon
-                        color={theme.textWarnC}
-                        name='cancel'
-                        size={35}
-                    />
-                    <Text style={{ ...AccountScreensStyles.removeFriendText, color: theme.textWarnC }}>
-                        REMOVE FRIEND
-                    </Text>
-                    <Icon
-                        color='transparent'
-                        name='cancel'
-                        size={35}
-                    />
-                </TouchableOpacity>
+                    <View style={{ height: 40 }} />
+                    <SeparatorLine width={0.8} />
+                    <TouchableOpacity onPress={() => firebaseClearChat(this.props.account.firebase?.uid || '', this.props.route.params)} style={AccountScreensStyles.removeFriendContainer}>
+                        <Icon
+                            color={theme.textWarnC}
+                            name='comment-remove-outline'
+                            size={35}
+                        />
+                        <Text style={{ ...AccountScreensStyles.removeFriendText, color: theme.textWarnC }}>
+                            CLEAR CHAT
+                        </Text>
+                        <Icon
+                            color='transparent'
+                            name='cancel'
+                            size={35}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.removeFriend} style={AccountScreensStyles.removeFriendContainer}>
+                        <Icon
+                            color={theme.textWarnC}
+                            name='cancel'
+                            size={35}
+                        />
+                        <Text style={{ ...AccountScreensStyles.removeFriendText, color: theme.textWarnC }}>
+                            REMOVE FRIEND
+                        </Text>
+                        <Icon
+                            color='transparent'
+                            name='cancel'
+                            size={35}
+                        />
+                    </TouchableOpacity>
+
+                </ScrollView>
             </View>
         );
     }
