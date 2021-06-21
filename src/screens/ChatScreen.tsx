@@ -28,7 +28,7 @@ interface ScreenState {
 
 class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
-    unsubscribe: (uid: string) => void;
+    unsubscribe: () => void;
 
     constructor(props: NavProps & ReduxProps) {
         super(props);
@@ -38,19 +38,20 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
             uid: props.route,
         };
 
-        this.refreshContent(props.route.params);
-        this.unsubscribe = props.navigation.addListener('focus', () => this.refreshContent(props.route.params));
+        this.refreshContent();
+        this.unsubscribe = props.navigation.addListener('focus', () => this.refreshContent());
     }
 
     componentWillUnmount() {
-        this.unsubscribe(this.state.uid);
+        this.unsubscribe();
     }
 
-    refreshContent(uid: string) {
+    refreshContent() {
+        let uid: string = this.props.route.params;
         firebaseFetchAccInfo(uid)
             .then((res: AccountInfoType) => {
                 if (res === null)
-                    return this.props.navigation.navigate('chat');
+                    return this.props.navigation.navigate('home');
 
                 this.setState({ account: { ...res, uid }, displayName: res.displayName, })
             });

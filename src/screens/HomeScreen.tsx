@@ -38,6 +38,8 @@ interface ScreenState {
 
 class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
+    unsubscribe: () => void;
+
     constructor(props: NavProps & ReduxProps) {
         super(props);
         this.state = {
@@ -47,7 +49,12 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
             refreshing: false,
         }
 
-        this.refresh();
+        this.refreshContent();
+        this.unsubscribe = props.navigation.addListener('focus', () => this.refreshContent());
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe();
     }
 
     close = () => this.setState({ modalMode: '' });
@@ -99,7 +106,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         this.setState({ modalMode: '' });
     }
 
-    refresh = () => firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
+    refreshContent = () => firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
         this.setState({ contacts: [], messages: {} });
 
         let contacts: { [key: string]: string } = res.val();
@@ -141,7 +148,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                         />
                     </TouchableOpacity>
                 </View>
-                <ScrollView refreshControl={<RefreshControl onRefresh={this.refresh} refreshing={this.state.refreshing} />}>
+                <ScrollView refreshControl={<RefreshControl onRefresh={this.refreshContent} refreshing={this.state.refreshing} />}>
                     {this.state.contacts.map((contact: ContactType) => {
                         let uid: string = contact.uid;
                         return (

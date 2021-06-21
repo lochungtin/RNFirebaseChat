@@ -37,11 +37,10 @@ class Screen extends React.Component<NavProps & ReduxProps> {
 
     removeFriend = () => {
         firebaseRemoveFriend(this.props.account.firebase?.uid || '', this.props.route.params.uid);
-        this.props.navigation.goBack();
+        this.props.navigation.navigate('home');
     }
 
     render() {
-        console.log(this.props.route);
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
