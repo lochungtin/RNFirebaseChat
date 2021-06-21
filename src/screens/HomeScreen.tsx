@@ -38,6 +38,8 @@ interface ScreenState {
 
 class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
+    unsubscribe: () => void;
+
     constructor(props: NavProps & ReduxProps) {
         super(props);
         this.state = {
@@ -46,7 +48,15 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
             refreshing: false,
         }
 
+        this.unsubscribe = props.navigation.addListener('focus', () => this.refreshContent());
+    }
+
+    componentDidMount() {
         this.refreshContent();
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe();
     }
 
     close = () => this.setState({ modalMode: '' });
@@ -99,6 +109,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
     }
 
     refreshContent = () => {
+        this.setState({ contacts: [] });
         firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) =>
             this.setState({ contacts: Object.keys(res.val() || []) }));
     }

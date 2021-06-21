@@ -109,20 +109,17 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
     }
 
     onContentSizeChange = (w: number, contentHeight: number) => {
-        if (this.state.contentHeight !== 0 && this.state.refreshing) {
+        if (this.state.contentHeight !== 0 && this.state.refreshing)
             this.scrollViewRef.current?.scrollTo({ y: contentHeight - this.state.contentHeight - 60, animated: true });
-            this.setState({ refreshing: false });
-        }
 
         if (this.state.offset + 100 > this.state.maxOffset)
             this.scrollViewRef.current?.scrollToEnd({ animated: true });
 
-        this.setState({ contentHeight });
+        this.setState({ contentHeight, refreshing: false });
     }
 
     onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
         let offset: number = event.nativeEvent.contentOffset.y;
-        console.log(offset);
         this.setState({ offset });
 
         if (this.state.maxOffset < offset)
@@ -131,6 +128,9 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
     refreshContent() {
         let uid: string = this.props.route.params;
+        if (this.props.route.params === 'clear')
+            return this.setState({ messages: [] });
+
         firebaseFetchAccInfo(uid, (res: firebaseConfig.database.DataSnapshot) => {
             let account: AccountInfoType = res.val();
 

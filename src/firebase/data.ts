@@ -58,7 +58,7 @@ export const firebaseRemoveFriend = (partyA: string, partyB: string, callback: (
     update[`/UserData/${partyB}/contacts/${partyA}`] = null;
 
     // delete chat
-    update[`/UserData/${cidKeyGen(partyA, partyB)}`] = null;
+    update[`/Messages/${cidKeyGen(partyA, partyB)}`] = null;
 
     db
         .ref()
@@ -75,7 +75,7 @@ export const firebaseFetchLastMessage = (cid: string, callback: (response: fireb
 }
 
 export const firebaseClearChat = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) =>
-    db.ref(`/UserData/${cidKeyGen(partyA, partyB)}`).set(null, callback);
+    db.ref(`/Messages/${cidKeyGen(partyA, partyB)}`).set(null, callback);
 
 export const firebasePushMessage = (sender: string, cid: string, content: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
     let timestamp: number = moment().toDate().getTime();

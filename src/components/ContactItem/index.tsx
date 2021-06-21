@@ -72,6 +72,7 @@ class ContactItem extends React.Component<ItemProps & ReduxProps, ItemState> {
         firebaseFetchLastMessage(cid, (res: firebaseConfig.database.DataSnapshot) => {
             let mMap: MessageMap = res.val();
 
+            console.log(mMap);
             if (mMap === null)
                 return;
 

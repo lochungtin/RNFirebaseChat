@@ -54,6 +54,11 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         this.refreshContent();
     }
 
+    clearChat = () => {
+        firebaseClearChat(this.props.account.firebase?.uid || '', this.props.route.params);
+        this.props.navigation.navigate('home');
+    }
+
     refreshContent = () => firebaseFetchAccInfo(this.props.route.params, (res: firebaseConfig.database.DataSnapshot) => {
         let account: AccountInfoType = res.val();
 
@@ -108,7 +113,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                     />
                     <View style={{ height: 40 }} />
                     <SeparatorLine width={0.8} />
-                    <TouchableOpacity onPress={() => firebaseClearChat(this.props.account.firebase?.uid || '', this.props.route.params)} style={AccountScreensStyles.removeFriendContainer}>
+                    <TouchableOpacity onPress={this.clearChat} style={AccountScreensStyles.removeFriendContainer}>
                         <Icon
                             color={theme.textWarnC}
                             name='comment-remove-outline'
