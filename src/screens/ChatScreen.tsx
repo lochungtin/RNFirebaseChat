@@ -8,10 +8,13 @@ import Header from '../components/Headers/InAppHeader';
 import MessageItem from '../components/MessageItem';
 
 import { theme } from '../data/color';
+import { ScreenStyles, ChatScreenStyles } from './styles';
+
 import { firebaseFetchAccInfo, firebasePushMessage } from '../firebase/data';
+import firebaseConfig from '../firebase/config';
 import { AccountInfoType, ContactType, MessageType, ReduxAccountType } from '../types';
 import { cidKeyGen } from '../utils/channelIDKeyGen';
-import { ScreenStyles, ChatScreenStyles } from './styles';
+
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -52,13 +55,14 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
     refreshContent() {
         let uid: string = this.props.route.params;
-        firebaseFetchAccInfo(uid)
-            .then((res: AccountInfoType) => {
-                if (res === null)
-                    return this.props.navigation.navigate('home');
+        firebaseFetchAccInfo(uid, (res: firebaseConfig.database.DataSnapshot) => {
+            let account: AccountInfoType = res.val();
 
-                this.setState({ account: { ...res, uid } });
-            });
+            if (account === null)
+                return this.props.navigation.navigate('home');
+
+            this.setState({ account: { ...account, uid } });
+        });
     }
 
     send = () => {

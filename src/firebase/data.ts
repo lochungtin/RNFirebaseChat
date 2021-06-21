@@ -21,11 +21,11 @@ export const firebaseDefaultErrorCallback = (err: Error | null) => {
 }
 
 // account related actions
-export const firebaseFetchAccInfo = async (uid: string) =>
-    db
-        .ref(`/UserData/${uid}/accountInfo/`)
-        .once('value')
-        .then((snapshot: firebaseConfig.database.DataSnapshot) => snapshot.val());
+export const firebaseFetchAccInfo = (uid: string, callback: (response: firebaseConfig.database.DataSnapshot) => void) => {
+    let ref = db.ref(`/UserData/${uid}/accountInfo/`);
+    ref.off()
+    ref.on('value', callback);
+}
 
 export const firebaseSetAccInfo = (uid: string, payload: AccountInfoType, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) =>
     db
@@ -33,7 +33,7 @@ export const firebaseSetAccInfo = (uid: string, payload: AccountInfoType, callba
         .set(payload, callback);
 
 // contacts and friends related actions
-export const firebaseFetchContacts = async (uid: string, callback: (response: firebaseConfig.database.DataSnapshot) => void) => {
+export const firebaseFetchContacts = (uid: string, callback: (response: firebaseConfig.database.DataSnapshot) => void) => {
     let ref = db.ref(`/UserData/${uid}/contacts/`);
     ref.off();
     ref.on('value', callback);
@@ -66,7 +66,7 @@ export const firebaseRemoveFriend = (partyA: string, partyB: string, callback: (
 }
 
 // message related actions
-export const firebaseFetchLastMessage = async (cid: string, callback: (response: firebaseConfig.database.DataSnapshot) => void) => {
+export const firebaseFetchLastMessage = (cid: string, callback: (response: firebaseConfig.database.DataSnapshot) => void) => {
     let ref = db.ref(`/Messages/${cid}/`)
     ref.off();
     ref
@@ -85,4 +85,8 @@ export const firebasePushMessage = (sender: string, cid: string, content: string
         content,
         sender,
     }, callback);
+}
+
+export const firebaseGetLatestMessages = (cid: string ) => {
+
 }

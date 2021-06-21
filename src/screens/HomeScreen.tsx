@@ -31,31 +31,22 @@ interface ReduxProps {
 }
 
 interface ScreenState {
-    contacts: Array<ContactType>
-    messages: MessageMap,
+    contacts: Array<string>
     modalMode: string,
     refreshing: boolean,
 }
 
 class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
-    unsubscribe: () => void;
-
     constructor(props: NavProps & ReduxProps) {
         super(props);
         this.state = {
             contacts: [],
-            messages: {},
             modalMode: '',
             refreshing: false,
         }
 
         this.refreshContent();
-        this.unsubscribe = props.navigation.addListener('focus', () => this.refreshContent());
-    }
-
-    componentWillUnmount() {
-        this.unsubscribe();
     }
 
     close = () => this.setState({ modalMode: '' });
@@ -107,33 +98,11 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         this.setState({ modalMode: '' });
     }
 
-    refreshContent = () => firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
-        this.setState({ contacts: [], messages: {} });
-
-        let contacts: { [key: string]: string } = res.val();
-        if (contacts === null)
-            return this.setState({ contacts: [] });
-        Object.keys(contacts).forEach(((uid: string) => {
-            firebaseFetchAccInfo(uid).then((contact: AccountInfoType) =>
-                this.setState({ contacts: [...this.state.contacts, { ...contact, uid }] }));
-
-            let cid = cidKeyGen(this.props.account.firebase?.uid || '', uid);
-            firebaseFetchLastMessage(cid, (mRes: firebaseConfig.database.DataSnapshot) => {
-                let mres: MessageMap = mRes.val();
-
-                if (mres === null)
-                    return;
-
-                let messages: MessageMap = { ...this.state.messages };
-                
-                messages[uid] = mres[Object.keys(mres)[0]];
-                this.setState({ messages });
-            })
-        }));
-    });
-
+    refreshContent = () => firebaseFetchContacts(this.props.account.firebase?.uid || '', (res: firebaseConfig.database.DataSnapshot) =>
+        this.setState({ contacts: Object.keys(res.val() || []) }));
 
     render() {
+        console.log(this.state.contacts);
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
@@ -154,15 +123,12 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                     </TouchableOpacity>
                 </View>
                 <ScrollView refreshControl={<RefreshControl onRefresh={this.refreshContent} refreshing={this.state.refreshing} />}>
-                    {this.state.contacts.map((contact: ContactType) => {
-                        let uid: string = contact.uid;
+                    {this.state.contacts.map((uid: string) => {
                         return (
                             <ContactItem
-                                contact={contact}
-                                key={uid}
-                                message={this.state.messages[uid]}
                                 onPress={() => this.props.navigation.navigate('chat', uid)}
-                                onPressPic={() => this.props.navigation.navigate('accV', contact)}
+                                onPressPic={() => this.props.navigation.navigate('accV', uid)}
+                                uid={uid}
                             />
                         );
                     })}
