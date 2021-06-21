@@ -42,6 +42,7 @@ interface ReduxProps {
 interface ScreenState {
     account: ContactType | undefined,
     cid: string,
+    contentHeight: number,
     earliest: string,
     maxOffset: number,
     messages: Array<MessageType>,
@@ -62,6 +63,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         this.state = {
             account: undefined,
             cid: cidKeyGen(props.account.firebase?.uid || '', props.route.params),
+            contentHeight: 0,
             earliest: '',
             maxOffset: 0,
             messages: [],
@@ -94,9 +96,10 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
     }
 
     fetchPrevMesseages = () => {
+        this.setState({ refreshing: true });
         firebaseGetMessagesFrom(this.state.cid, this.state.earliest).then((res: MessageMap) => {
             if (res === null)
-                return;
+                return this.setState({ refreshing: false });
 
             let keys: Array<string> = Object.keys(res);
             let messages: Array<MessageType> = keys.map((mid: string) => res[mid]);
@@ -105,9 +108,16 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         });
     }
 
-    onContentSizeChange = () => {
+    onContentSizeChange = (w: number, contentHeight: number) => {
+        if (this.state.contentHeight !== 0 && this.state.refreshing) {
+            this.scrollViewRef.current?.scrollTo({ y: contentHeight - this.state.contentHeight - 60, animated: true });
+            this.setState({ refreshing: false });
+        }
+
         if (this.state.offset + 100 > this.state.maxOffset)
-            this.scrollViewRef.current?.scrollToEnd({ animated: false });
+            this.scrollViewRef.current?.scrollToEnd({ animated: true });
+
+        this.setState({ contentHeight });
     }
 
     onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

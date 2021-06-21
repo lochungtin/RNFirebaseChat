@@ -127,6 +127,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                     {this.state.contacts.map((uid: string) => {
                         return (
                             <ContactItem
+                                key={uid}
                                 onPress={() => this.props.navigation.navigate('chat', uid)}
                                 onPressPic={() => this.props.navigation.navigate('accV', uid)}
                                 uid={uid}
