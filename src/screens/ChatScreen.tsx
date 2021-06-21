@@ -1,6 +1,15 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { createRef } from 'react';
-import { RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    RefreshControl,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -11,10 +20,15 @@ import { theme } from '../data/color';
 import { ScreenStyles, ChatScreenStyles } from './styles';
 
 import firebaseConfig from '../firebase/config';
-import { firebaseFetchAccInfo, firebaseFetchLastMessage, firebaseGetLatestMessages, firebaseGetMessagesFrom, firebasePushMessage } from '../firebase/data';
+import {
+    firebaseFetchAccInfo,
+    firebaseFetchLastMessage,
+    firebaseGetLatestMessages,
+    firebaseGetMessagesFrom,
+    firebasePushMessage,
+} from '../firebase/data';
 import { AccountInfoType, ContactType, MessageMap, MessageType, ReduxAccountType } from '../types';
 import { cidKeyGen } from '../utils/channelIDKeyGen';
-
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -29,7 +43,9 @@ interface ScreenState {
     account: ContactType | undefined,
     cid: string,
     earliest: string,
+    maxOffset: number,
     messages: Array<MessageType>,
+    offset: number,
     refreshing: boolean,
     text: string,
     uid: string,
@@ -47,7 +63,9 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
             account: undefined,
             cid: cidKeyGen(props.account.firebase?.uid || '', props.route.params),
             earliest: '',
+            maxOffset: 0,
             messages: [],
+            offset: 0,
             refreshing: false,
             text: '',
             uid: props.route.params,
@@ -85,6 +103,20 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
             this.setState({ messages: [...messages, ...this.state.messages], earliest: keys[0] });
         });
+    }
+
+    onContentSizeChange = () => {
+        if (this.state.offset + 100 > this.state.maxOffset)
+            this.scrollViewRef.current?.scrollToEnd({ animated: false });
+    }
+
+    onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        let offset: number = event.nativeEvent.contentOffset.y;
+        console.log(offset);
+        this.setState({ offset });
+
+        if (this.state.maxOffset < offset)
+            this.setState({ maxOffset: offset });
     }
 
     refreshContent() {
@@ -145,15 +177,18 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                     </TouchableOpacity>
                 </View>
                 <ScrollView
+                    onContentSizeChange={this.onContentSizeChange}
+                    onScroll={this.onScroll}
                     ref={this.scrollViewRef}
                     refreshControl={<RefreshControl onRefresh={this.fetchPrevMesseages} refreshing={this.state.refreshing} />}
-                    onContentSizeChange={() => this.scrollViewRef.current?.scrollToEnd()}
                 >
-                    {this.state.messages.map((message: MessageType) => {
-                        return (
-                            <MessageItem key={message.timestamp} message={message} />
-                        );
-                    })}
+                    <View style={ScreenStyles.scrollView}>
+                        {this.state.messages.map((message: MessageType) => {
+                            return (
+                                <MessageItem key={message.timestamp} message={message} />
+                            );
+                        })}
+                    </View>
                 </ScrollView>
                 <View style={ChatScreenStyles.textInputContainer}>
                     <TextInput
