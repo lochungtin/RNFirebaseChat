@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Header from '../components/Headers/InAppHeader';
 
 import { theme } from '../data/color';
-import { ScreenStyles, AccountScreenStyles } from './styles';
+import { ScreenStyles, AccountScreensStyles } from './styles';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -22,7 +22,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
-                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreenStyles.headerContainer }}>
+                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreensStyles.headerContainer }}>
                     <TouchableOpacity onPress={this.props.navigation.goBack}>
                         <Icon
                             color={theme.textLightC}

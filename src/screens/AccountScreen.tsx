@@ -12,7 +12,7 @@ import InfoTextInput from '../components/InfoTextInput';
 import SeparatorLine from '../components/SeparatorLine';
 
 import { theme } from '../data/color';
-import { AccountScreenStyles, ScreenStyles } from './styles';
+import { AccountScreensStyles, ScreenStyles } from './styles';
 
 import { changePswd } from '../firebase/auth';
 import { firebaseSetAccInfo } from '../firebase/data';
@@ -173,7 +173,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
-                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreenStyles.headerContainer }}>
+                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreensStyles.headerContainer }}>
                     <TouchableOpacity onPress={this.props.navigation.goBack}>
                         <Icon
                             color={theme.textLightC}
@@ -184,8 +184,8 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                 </View>
                 <ScrollView>
                     <View style={ScreenStyles.scrollView}>
-                        <View style={AccountScreenStyles.pfpStack}>
-                            <View style={AccountScreenStyles.pfpContainer}>
+                        <View style={AccountScreensStyles.pfpStack}>
+                            <View style={AccountScreensStyles.pfpContainer}>
                                 <View style={tempPfp}>
                                     <Icon
                                         color={theme.textLightC}
@@ -194,7 +194,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                                     />
                                 </View>
                             </View>
-                            <TouchableOpacity onPress={() => { }} style={{ ...AccountScreenStyles.pfpEditBtn, backgroundColor: theme.accent }}>
+                            <TouchableOpacity onPress={() => { }} style={{ ...AccountScreensStyles.pfpEditBtn, backgroundColor: theme.accent }}>
                                 <Icon
                                     color={theme.textLightC}
                                     name='pencil'
@@ -230,7 +230,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                     onBackdropPress={this.close}
                     onSwipeComplete={this.close}
                     propagateSwipe={true}
-                    style={AccountScreenStyles.modalRootContainer}
+                    style={AccountScreensStyles.modalRootContainer}
                     swipeDirection='down'
                 >
                     {this.modalContent()}

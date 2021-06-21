@@ -116,7 +116,7 @@ export const HomeScreenStyles = StyleSheet.create({
     },
 });
 
-export const AccountScreenStyles = StyleSheet.create({
+export const AccountScreensStyles = StyleSheet.create({
     headerContainer: {
         alignItems: 'center',
         height: 60,

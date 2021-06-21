@@ -8,7 +8,7 @@ import Header from '../components/Headers/InAppHeader';
 import SeparatorLine from '../components/SeparatorLine';
 
 import { theme } from '../data/color';
-import { ScreenStyles, AccountScreenStyles } from './styles';
+import { ScreenStyles, AccountScreensStyles } from './styles';
 
 import { firebaseClearChat, firebaseRemoveFriend } from '../firebase/data';
 import { ReduxAccountType } from '../types';
@@ -45,7 +45,7 @@ class Screen extends React.Component<NavProps & ReduxProps> {
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
-                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreenStyles.headerContainer }}>
+                <View style={{ ...ScreenStyles.alignLeft, ...AccountScreensStyles.headerContainer }}>
                     <TouchableOpacity onPress={this.props.navigation.goBack}>
                         <Icon
                             color={theme.textLightC}
@@ -54,8 +54,8 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={AccountScreenStyles.pfpStack}>
-                    <View style={AccountScreenStyles.pfpContainer}>
+                <View style={AccountScreensStyles.pfpStack}>
+                    <View style={AccountScreensStyles.pfpContainer}>
                         <View style={tempPfp}>
                             <Icon
                                 color={theme.textLightC}
@@ -78,13 +78,13 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                 />
                 <View style={{ height: 40 }} />
                 <SeparatorLine width={0.8} />
-                <TouchableOpacity onPress={() => firebaseClearChat(this.props.account.firebase?.uid || '', this.props.route.params.uid)} style={AccountScreenStyles.removeFriendContainer}>
+                <TouchableOpacity onPress={() => firebaseClearChat(this.props.account.firebase?.uid || '', this.props.route.params.uid)} style={AccountScreensStyles.removeFriendContainer}>
                     <Icon
                         color={theme.textWarnC}
                         name='comment-remove-outline'
                         size={35}
                     />
-                    <Text style={{ ...AccountScreenStyles.removeFriendText, color: theme.textWarnC }}>
+                    <Text style={{ ...AccountScreensStyles.removeFriendText, color: theme.textWarnC }}>
                         CLEAR CHAT
                     </Text>
                     <Icon
@@ -93,13 +93,13 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                         size={35}
                     />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={this.removeFriend} style={AccountScreenStyles.removeFriendContainer}>
+                <TouchableOpacity onPress={this.removeFriend} style={AccountScreensStyles.removeFriendContainer}>
                     <Icon
                         color={theme.textWarnC}
                         name='cancel'
                         size={35}
                     />
-                    <Text style={{ ...AccountScreenStyles.removeFriendText, color: theme.textWarnC }}>
+                    <Text style={{ ...AccountScreensStyles.removeFriendText, color: theme.textWarnC }}>
                         REMOVE FRIEND
                     </Text>
                     <Icon
