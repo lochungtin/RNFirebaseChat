@@ -104,7 +104,6 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
     }
 
     render() {
-        console.log(this.state.contacts);
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />

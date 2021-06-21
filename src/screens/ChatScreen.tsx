@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { createRef } from 'react';
+import { RefreshControl, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
@@ -10,9 +10,9 @@ import MessageItem from '../components/MessageItem';
 import { theme } from '../data/color';
 import { ScreenStyles, ChatScreenStyles } from './styles';
 
-import { firebaseFetchAccInfo, firebasePushMessage } from '../firebase/data';
 import firebaseConfig from '../firebase/config';
-import { AccountInfoType, ContactType, MessageType, ReduxAccountType } from '../types';
+import { firebaseFetchAccInfo, firebaseFetchLastMessage, firebaseGetLatestMessages, firebaseGetMessagesFrom, firebasePushMessage } from '../firebase/data';
+import { AccountInfoType, ContactType, MessageMap, MessageType, ReduxAccountType } from '../types';
 import { cidKeyGen } from '../utils/channelIDKeyGen';
 
 
@@ -27,12 +27,17 @@ interface ReduxProps {
 
 interface ScreenState {
     account: ContactType | undefined,
+    cid: string,
+    earliest: string,
     messages: Array<MessageType>,
+    refreshing: boolean,
     text: string,
     uid: string,
 }
 
 class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
+
+    scrollViewRef: React.RefObject<ScrollView>;
 
     unsubscribe: () => void;
 
@@ -40,17 +45,46 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         super(props);
         this.state = {
             account: undefined,
+            cid: cidKeyGen(props.account.firebase?.uid || '', props.route.params),
+            earliest: '',
             messages: [],
+            refreshing: false,
             text: '',
-            uid: props.route,
+            uid: props.route.params,
         };
 
         this.refreshContent();
         this.unsubscribe = props.navigation.addListener('focus', () => this.refreshContent());
+
+        this.scrollViewRef = createRef();
+    }
+
+    componentDidMount() {
+        firebaseGetLatestMessages(this.state.cid).then((res: MessageMap) => {
+            if (res === null)
+                return;
+
+            let keys: Array<string> = Object.keys(res);
+            let messages: Array<MessageType> = keys.map((mid: string) => res[mid]);
+
+            this.setState({ messages, earliest: keys[0] });
+        });
     }
 
     componentWillUnmount() {
         this.unsubscribe();
+    }
+
+    fetchPrevMesseages = () => {
+        firebaseGetMessagesFrom(this.state.cid, this.state.earliest).then((res: MessageMap) => {
+            if (res === null)
+                return;
+
+            let keys: Array<string> = Object.keys(res);
+            let messages: Array<MessageType> = keys.map((mid: string) => res[mid]);
+
+            this.setState({ messages: [...messages, ...this.state.messages], earliest: keys[0] });
+        });
     }
 
     refreshContent() {
@@ -63,6 +97,18 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
             this.setState({ account: { ...account, uid } });
         });
+
+        firebaseFetchLastMessage(this.state.cid, (res: firebaseConfig.database.DataSnapshot) => {
+            let mMap: MessageMap = res.val();
+
+            if (mMap === null || !this.state.messages.length)
+                return;
+
+            let message: MessageType = mMap[Object.keys(mMap)[0]];
+
+            if (this.state.messages[this.state.messages.length - 1].timestamp < message.timestamp)
+                this.setState({ messages: [...this.state.messages, message] });
+        });
     }
 
     send = () => {
@@ -70,7 +116,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         let cid = cidKeyGen(sender, this.state.account?.uid || '');
         if (!this.state.text)
             return;
-        
+
         firebasePushMessage(sender, cid, this.state.text);
         this.setState({ text: '' });
     }
@@ -90,7 +136,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                     <Text style={{ ...ChatScreenStyles.displayNameText, color: theme.textLightC }}>
                         {this.state.account?.displayName}
                     </Text>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('accV', this.state.account)}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('accV', this.state.uid)}>
                         <Icon
                             color={theme.textLightC}
                             name='account'
@@ -98,7 +144,11 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                         />
                     </TouchableOpacity>
                 </View>
-                <ScrollView>
+                <ScrollView
+                    ref={this.scrollViewRef}
+                    refreshControl={<RefreshControl onRefresh={this.fetchPrevMesseages} refreshing={this.state.refreshing} />}
+                    onContentSizeChange={() => this.scrollViewRef.current?.scrollToEnd()}
+                >
                     {this.state.messages.map((message: MessageType) => {
                         return (
                             <MessageItem key={message.timestamp} message={message} />
@@ -122,7 +172,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                         />
                     </TouchableOpacity>
                 </View>
-            </View>
+            </View >
         );
     }
 }

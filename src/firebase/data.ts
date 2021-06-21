@@ -4,7 +4,7 @@ import { showMessage } from 'react-native-flash-message';
 import firebaseConfig from './config';
 
 import { theme } from '../data/color';
-import { AccountInfoType, MessageType } from '../types';
+import { AccountInfoType } from '../types';
 import { cidKeyGen } from '../utils/channelIDKeyGen';
 
 const db: firebaseConfig.database.Database = firebaseConfig.database();
@@ -80,13 +80,27 @@ export const firebaseClearChat = (partyA: string, partyB: string, callback: ((er
 export const firebasePushMessage = (sender: string, cid: string, content: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
     let timestamp: number = moment().toDate().getTime();
 
-    db.ref(`/Messages/${cid}/${timestamp}`).set({
-        timestamp,
-        content,
-        sender,
-    }, callback);
+    db
+        .ref(`/Messages/${cid}/${timestamp}`)
+        .set({
+            timestamp,
+            content,
+            sender,
+        }, callback);
 }
 
-export const firebaseGetLatestMessages = (cid: string ) => {
+export const firebaseGetLatestMessages = async (cid: string) =>
+    db
+        .ref(`/Messages/${cid}/`)
+        .limitToLast(10)
+        .get()
+        .then((res: firebaseConfig.database.DataSnapshot) => res.val());
 
-}
+export const firebaseGetMessagesFrom = async (cid: string, mid: string) =>
+    db
+        .ref(`/Messages/${cid}/`)
+        .orderByKey()
+        .endBefore(mid)
+        .limitToLast(10)
+        .get()
+        .then((res: firebaseConfig.database.DataSnapshot) => res.val());
