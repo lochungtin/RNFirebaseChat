@@ -66,23 +66,23 @@ export const firebaseRemoveFriend = (partyA: string, partyB: string, callback: (
 }
 
 // message related actions
-export const firebaseFetchLastMessage = async (cid: string) =>
-    db
-        .ref(`/Messages/${cid}/`)
-        .orderByKey()
+export const firebaseFetchLastMessage = async (cid: string, callback: (response: firebaseConfig.database.DataSnapshot) => void) => {
+    let ref = db.ref(`/Messages/${cid}/`)
+    ref.off();
+    ref
         .limitToLast(1)
-        .get()
-        .then((snapshot: firebaseConfig.database.DataSnapshot) => snapshot.val());
+        .on('value', callback);
+}
 
-export const firebaseClearChat = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => 
+export const firebaseClearChat = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) =>
     db.ref(`/UserData/${cidKeyGen(partyA, partyB)}`).set(null, callback);
 
 export const firebasePushMessage = (sender: string, cid: string, content: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
-    let timestamp: number = moment().toDate().getTime();    
+    let timestamp: number = moment().toDate().getTime();
 
     db.ref(`/Messages/${cid}/${timestamp}`).set({
         timestamp,
         content,
         sender,
-    });
+    }, callback);
 }

@@ -118,12 +118,17 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                 this.setState({ contacts: [...this.state.contacts, { ...contact, uid }] }));
 
             let cid = cidKeyGen(this.props.account.firebase?.uid || '', uid);
-            firebaseFetchLastMessage(cid).then((res: MessageMap) => {
-                let messages: MessageMap = { ...this.state.messages };
+            firebaseFetchLastMessage(cid, (mRes: firebaseConfig.database.DataSnapshot) => {
+                let mres: MessageMap = mRes.val();
 
-                messages[uid] = res[Object.keys(res)[0]];
+                if (mres === null)
+                    return;
+
+                let messages: MessageMap = { ...this.state.messages };
+                
+                messages[uid] = mres[Object.keys(mres)[0]];
                 this.setState({ messages });
-            });
+            })
         }));
     });
 
@@ -172,7 +177,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                         color: theme.accent,
                         icon: <Icon
                             color={theme.textLightC}
-                            name='qrcode'
+                            name={elem.name}
                             size={20}
                         />,
                         textColor: theme.textC,

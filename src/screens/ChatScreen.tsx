@@ -67,7 +67,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         if (!this.state.text)
             return;
         
-        firebasePushMessage(sender, cid, 'some text');
+        firebasePushMessage(sender, cid, this.state.text);
         this.setState({ text: '' });
     }
 
