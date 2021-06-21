@@ -26,7 +26,6 @@ const RootNav = createStackNavigator();
 
 class AppNav extends React.Component<ReduxProps> {
     render() {
-        console.log(this.props.account)
         return (
             <NavigationContainer>
                 <StatusBar backgroundColor={theme.accent} />

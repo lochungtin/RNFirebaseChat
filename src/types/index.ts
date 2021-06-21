@@ -44,8 +44,7 @@ export interface ContactType {
 // message type
 export interface MessageType {
     content: string,
-    isSender: boolean,
-    mid: string,
+    sender: string,
     timestamp: number,
 }
 

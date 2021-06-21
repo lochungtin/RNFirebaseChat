@@ -7,13 +7,18 @@ import SeparatorLine from '../SeparatorLine';
 import { theme } from '../../data/color';
 import { ContactItemStyles } from './styles';
 
-import { ContactType, MessageType } from '../../types';
+import { ContactType, MessageType, ReduxAccountType } from '../../types';
+import { connect } from 'react-redux';
 
 interface ItemProps {
     contact: ContactType,
     message: MessageType | undefined,
     onPress: () => void,
     onPressPic: () => void,
+}
+
+interface ReduxProps {
+    account: ReduxAccountType,
 }
 
 const tempPfp = (
@@ -34,11 +39,11 @@ const tempPfp = (
     </View>
 );
 
-export default class ContactItem extends React.Component<ItemProps> {
+class ContactItem extends React.Component<ItemProps & ReduxProps> {
     render() {
         let message: string = '';
         if (this.props.message) {
-            message = this.props.message.isSender ? 'You' : this.props.contact.displayName;
+            message = this.props.message.sender === this.props.account.firebase?.uid ? 'You' : this.props.contact.displayName;
             message += `: ${this.props.message.content}`;
 
             if (message.length > 32)
@@ -65,3 +70,9 @@ export default class ContactItem extends React.Component<ItemProps> {
         );
     }
 }
+
+const mapStateToProps = (state: ReduxProps) => ({
+    account: state.account,
+});
+
+export default connect(mapStateToProps)(ContactItem);

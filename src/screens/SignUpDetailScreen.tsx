@@ -30,7 +30,6 @@ export default class Screen extends React.Component<NavProps> {
     }
 
     signUp = () => {
-        console.log('s');
         if (!this.state.name)
             return showMessage({
                 backgroundColor: theme.accent,

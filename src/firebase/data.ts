@@ -1,8 +1,11 @@
+import moment from 'moment';
 import { showMessage } from 'react-native-flash-message';
-import { theme } from '../data/color';
-import { AccountInfoType } from '../types';
 
 import firebaseConfig from './config';
+
+import { theme } from '../data/color';
+import { AccountInfoType, MessageType } from '../types';
+import { cidKeyGen } from '../utils/channelIDKeyGen';
 
 const db: firebaseConfig.database.Database = firebaseConfig.database();
 
@@ -42,7 +45,9 @@ export const firebaseAddFriends = (partyA: string, partyB: string, callback: ((e
     update[`/UserData/${partyA}/contacts/${partyB}`] = '';
     update[`/UserData/${partyB}/contacts/${partyA}`] = '';
 
-    db.ref().update(update, callback);
+    db
+        .ref()
+        .update(update, callback);
 }
 
 export const firebaseRemoveFriend = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
@@ -53,24 +58,31 @@ export const firebaseRemoveFriend = (partyA: string, partyB: string, callback: (
     update[`/UserData/${partyB}/contacts/${partyA}`] = null;
 
     // delete chat
-    update[`/UserData/${partyA}/messages/${partyB}`] = null;
-    update[`/UserData/${partyB}/messages/${partyA}`] = null;
+    update[`/UserData/${cidKeyGen(partyA, partyB)}`] = null;
 
-    db.ref().update(update, callback);
+    db
+        .ref()
+        .update(update, callback);
 }
 
 // message related actions
-export const firebaseFetchMsgInfo = async (uid: string, mid: string) =>
+export const firebaseFetchLastMessage = async (cid: string) =>
     db
-        .ref(`/UserData/${uid}/messages/${mid}`)
-        .once('value')
+        .ref(`/Messages/${cid}/`)
+        .orderByKey()
+        .limitToLast(1)
+        .get()
         .then((snapshot: firebaseConfig.database.DataSnapshot) => snapshot.val());
 
-export const firebaseClearChat = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
-    let update: any = {};
+export const firebaseClearChat = (partyA: string, partyB: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => 
+    db.ref(`/UserData/${cidKeyGen(partyA, partyB)}`).set(null, callback);
 
-    update[`/UserData/${partyA}/messages/${partyB}`] = null;
-    update[`/UserData/${partyB}/messages/${partyA}`] = null;
+export const firebasePushMessage = (sender: string, cid: string, content: string, callback: ((err: Error | null) => any) = firebaseDefaultErrorCallback) => {
+    let timestamp: number = moment().toDate().getTime();    
 
-    db.ref().update(update, callback);
+    db.ref(`/Messages/${cid}/${timestamp}`).set({
+        timestamp,
+        content,
+        sender,
+    });
 }

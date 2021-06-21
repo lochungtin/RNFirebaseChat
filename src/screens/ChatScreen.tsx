@@ -8,8 +8,9 @@ import Header from '../components/Headers/InAppHeader';
 import MessageItem from '../components/MessageItem';
 
 import { theme } from '../data/color';
-import { firebaseFetchAccInfo } from '../firebase/data';
-import { AccountInfoType, ContactType, MessageType } from '../types';
+import { firebaseFetchAccInfo, firebasePushMessage } from '../firebase/data';
+import { AccountInfoType, ContactType, MessageType, ReduxAccountType } from '../types';
+import { cidKeyGen } from '../utils/channelIDKeyGen';
 import { ScreenStyles, ChatScreenStyles } from './styles';
 
 interface NavProps {
@@ -18,7 +19,7 @@ interface NavProps {
 }
 
 interface ReduxProps {
-
+    account: ReduxAccountType,
 }
 
 interface ScreenState {
@@ -61,10 +62,12 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
     }
 
     send = () => {
+        let sender = this.props.account.firebase?.uid || '';
+        let cid = cidKeyGen(sender, this.state.account?.uid || '');
         if (!this.state.text)
             return;
-
-        console.log(this.state.text);
+        
+        firebasePushMessage(sender, cid, 'some text');
         this.setState({ text: '' });
     }
 
@@ -92,28 +95,9 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-                    {[
-                        {
-                            content: 'Some text saying hi',
-                            isSender: false,
-                            timestamp: 1624280980273,
-                            mid: 'a',
-                        },
-                        {
-                            content: 'Some other text saying hi again',
-                            isSender: true,
-                            timestamp: 1624280980273,
-                            mid: 'a',
-                        },
-                        {
-                            content: 'how are you my guy',
-                            isSender: false,
-                            timestamp: 1624280980273,
-                            mid: 'a',
-                        },
-                    ].map((message: MessageType) => {
+                    {this.state.messages.map((message: MessageType) => {
                         return (
-                            <MessageItem message={message} />
+                            <MessageItem key={message.timestamp} message={message} />
                         );
                     })}
                 </ScrollView>
@@ -140,7 +124,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 }
 
 const mapStateToProps = (state: ReduxProps) => ({
-
+    account: state.account,
 });
 
 export default connect(mapStateToProps)(Screen);

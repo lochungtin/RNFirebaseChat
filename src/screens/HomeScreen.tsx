@@ -16,10 +16,11 @@ import { HomeScreenStyles, ScreenStyles } from './styles';
 
 import { signOut } from '../firebase/auth';
 import firebaseConfig from '../firebase/config';
-import { firebaseAddFriends, firebaseFetchAccInfo, firebaseFetchContacts, firebaseFetchMsgInfo, } from '../firebase/data';
+import { firebaseAddFriends, firebaseFetchAccInfo, firebaseFetchContacts, firebaseFetchLastMessage } from '../firebase/data';
 import { logout } from '../redux/action';
 import { store } from '../redux/store';
 import { AccountInfoType, ContactType, MessageMap, MessageType, ReduxAccountType } from '../types';
+import { cidKeyGen } from '../utils/channelIDKeyGen';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>,
@@ -116,14 +117,13 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
             firebaseFetchAccInfo(uid).then((contact: AccountInfoType) =>
                 this.setState({ contacts: [...this.state.contacts, { ...contact, uid }] }));
 
-            let mid = contacts[uid];
-            if (mid)
-                firebaseFetchMsgInfo(uid, mid).then((message: MessageType) => {
-                    let messages: MessageMap = { ...this.state.messages };
-                    messages[uid] = message;
+            let cid = cidKeyGen(this.props.account.firebase?.uid || '', uid);
+            firebaseFetchLastMessage(cid).then((res: MessageMap) => {
+                let messages: MessageMap = { ...this.state.messages };
 
-                    this.setState({ messages });
-                });
+                messages[uid] = res[Object.keys(res)[0]];
+                this.setState({ messages });
+            });
         }));
     });
 
