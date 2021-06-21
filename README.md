@@ -1,1 +1,1 @@
-RN Firebase Chat App
+# RN Firebase Chat App
