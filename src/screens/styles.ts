@@ -172,3 +172,20 @@ export const AccountScreensStyles = StyleSheet.create({
         width: screenWidth * 0.5,
     },
 });
+
+export const ChatScreenStyles = StyleSheet.create({
+    headerContainer: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        height: 60,
+        justifyContent: 'space-between',
+        width: screenWidth * 0.90,
+        zIndex: 2,
+    },
+    displayNameText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        width: screenWidth * 0.50,
+    },
+});
