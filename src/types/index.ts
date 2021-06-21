@@ -26,6 +26,7 @@ export interface ThemeType {
     accentFade: string,
     accountInputBgC: string,
     backgroundC: string,
+    messageBgC: string,
     separatorC: string,
     textC: string,
     textDisabledC: string,

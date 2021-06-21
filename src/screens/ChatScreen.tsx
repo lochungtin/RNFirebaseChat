@@ -5,10 +5,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import Header from '../components/Headers/InAppHeader';
+import MessageItem from '../components/MessageItem';
 
 import { theme } from '../data/color';
 import { firebaseFetchAccInfo } from '../firebase/data';
-import { AccountInfoType, ContactType } from '../types';
+import { AccountInfoType, ContactType, MessageType } from '../types';
 import { ScreenStyles, ChatScreenStyles } from './styles';
 
 interface NavProps {
@@ -22,7 +23,7 @@ interface ReduxProps {
 
 interface ScreenState {
     account: ContactType | undefined,
-    displayName: string,
+    messages: Array<MessageType>,
     text: string,
     uid: string,
 }
@@ -35,7 +36,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         super(props);
         this.state = {
             account: undefined,
-            displayName: '',
+            messages: [],
             text: '',
             uid: props.route,
         };
@@ -55,11 +56,14 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                 if (res === null)
                     return this.props.navigation.navigate('home');
 
-                this.setState({ account: { ...res, uid }, displayName: res.displayName, })
+                this.setState({ account: { ...res, uid } });
             });
     }
 
     send = () => {
+        if (!this.state.text)
+            return;
+
         console.log(this.state.text);
         this.setState({ text: '' });
     }
@@ -77,7 +81,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                         />
                     </TouchableOpacity>
                     <Text style={{ ...ChatScreenStyles.displayNameText, color: theme.textLightC }}>
-                        {this.state.displayName}
+                        {this.state.account?.displayName}
                     </Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('accV', this.state.account)}>
                         <Icon
@@ -88,7 +92,30 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-                    
+                    {[
+                        {
+                            content: 'Some text saying hi',
+                            isSender: false,
+                            timestamp: 1624280980273,
+                            mid: 'a',
+                        },
+                        {
+                            content: 'Some other text saying hi again',
+                            isSender: true,
+                            timestamp: 1624280980273,
+                            mid: 'a',
+                        },
+                        {
+                            content: 'how are you my guy',
+                            isSender: false,
+                            timestamp: 1624280980273,
+                            mid: 'a',
+                        },
+                    ].map((message: MessageType) => {
+                        return (
+                            <MessageItem message={message} />
+                        );
+                    })}
                 </ScrollView>
                 <View style={ChatScreenStyles.textInputContainer}>
                     <TextInput

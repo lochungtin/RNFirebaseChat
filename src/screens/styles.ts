@@ -179,6 +179,7 @@ export const ChatScreenStyles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         height: 60,
+        marginBottom: 20,
         justifyContent: 'space-between',
         width: screenWidth * 0.90,
         zIndex: 2,
