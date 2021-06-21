@@ -1,6 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { RefreshControl, ScrollView, StyleProp, Text, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { RefreshControl, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -28,16 +28,6 @@ interface ScreenState {
     account: AccountInfoType,
     refreshing: boolean,
 }
-
-const tempPfp: StyleProp<ViewStyle> = {
-    alignItems: 'center',
-    backgroundColor: theme.accentFade,
-    borderRadius: 80,
-    display: 'flex',
-    height: 160,
-    justifyContent: 'center',
-    width: 160,
-};
 
 class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
 
@@ -88,16 +78,12 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                 </View>
                 <ScrollView refreshControl={<RefreshControl onRefresh={this.refreshContent} refreshing={this.state.refreshing} />}>
                     <View style={AccountScreensStyles.pfpStackPositioner}>
-                        <View style={AccountScreensStyles.pfpStack}>
-                            <View style={AccountScreensStyles.pfpContainer}>
-                                <View style={tempPfp}>
-                                    <Icon
-                                        color={theme.textLightC}
-                                        name='account'
-                                        size={100}
-                                    />
-                                </View>
-                            </View>
+                        <View style={{ ...AccountScreensStyles.pfpContainer, backgroundColor: theme.accentFade }}>
+                            <Icon
+                                color={theme.textLightC}
+                                name='account'
+                                size={100}
+                            />
                         </View>
                     </View>
                     <SeparatorLine width={0.8} />

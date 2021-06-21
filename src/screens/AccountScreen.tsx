@@ -184,23 +184,14 @@ class Screen extends React.Component<NavProps & ReduxProps> {
                 </View>
                 <ScrollView>
                     <View style={ScreenStyles.scrollView}>
-                        <View style={AccountScreensStyles.pfpStack}>
-                            <View style={AccountScreensStyles.pfpContainer}>
-                                <View style={tempPfp}>
-                                    <Icon
-                                        color={theme.textLightC}
-                                        name='account'
-                                        size={100}
-                                    />
-                                </View>
-                            </View>
-                            <TouchableOpacity onPress={() => { }} style={{ ...AccountScreensStyles.pfpEditBtn, backgroundColor: theme.accent }}>
+                        <View style={AccountScreensStyles.pfpStackPositioner}>
+                            <View style={{ ...AccountScreensStyles.pfpContainer, backgroundColor: theme.accentFade }}>
                                 <Icon
                                     color={theme.textLightC}
-                                    name='pencil'
-                                    size={20}
+                                    name='account'
+                                    size={100}
                                 />
-                            </TouchableOpacity>
+                            </View>
                         </View>
                         <SeparatorLine width={0.8} />
                         <AccountInfoItem

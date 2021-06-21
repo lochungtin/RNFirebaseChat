@@ -28,24 +28,6 @@ interface ItemState {
     lastMessage: MessageType | undefined,
 }
 
-const tempPfp = (
-    <View style={{
-        alignItems: 'center',
-        backgroundColor: theme.accentFade,
-        borderRadius: 27.5,
-        display: 'flex',
-        height: 55,
-        justifyContent: 'center',
-        width: 55,
-    }}>
-        <Icon
-            color={theme.textLightC}
-            name='account'
-            size={40}
-        />
-    </View>
-);
-
 class ContactItem extends React.Component<ItemProps & ReduxProps, ItemState> {
 
     constructor(props: ItemProps & ReduxProps) {
@@ -93,8 +75,12 @@ class ContactItem extends React.Component<ItemProps & ReduxProps, ItemState> {
         return (
             <>
                 <TouchableOpacity onPress={this.props.onPress} style={ContactItemStyles.rootContainer}>
-                    <TouchableOpacity onPress={this.props.onPressPic} style={ContactItemStyles.pfpContainer}>
-                        {tempPfp}
+                    <TouchableOpacity onPress={this.props.onPressPic} style={{ ...ContactItemStyles.pfpContainer, backgroundColor: theme.accentFade }}>
+                        <Icon
+                            color={theme.textLightC}
+                            name='account'
+                            size={40}
+                        />
                     </TouchableOpacity>
                     <View style={ContactItemStyles.rootTextContainer}>
                         <Text style={{ ...ContactItemStyles.displayNameText, color: theme.textC }}>
