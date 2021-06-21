@@ -188,4 +188,20 @@ export const ChatScreenStyles = StyleSheet.create({
         fontWeight: 'bold',
         width: screenWidth * 0.50,
     },
+    textInputContainer: {
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 10,
+        width: screenWidth * 0.9,
+    },
+    textInput: {
+        borderWidth: 2,
+        borderRadius: 25,
+        height: 50,        
+        paddingHorizontal: 25,
+        paddingVertical: 0,
+        width: screenWidth * 0.76,
+    },
 });

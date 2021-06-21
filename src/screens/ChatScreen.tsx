@@ -1,10 +1,11 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import Header from '../components/Headers/InAppHeader';
+import SeparatorLine from '../components/SeparatorLine';
 
 import { theme } from '../data/color';
 import { firebaseFetchAccInfo } from '../firebase/data';
@@ -23,6 +24,7 @@ interface ReduxProps {
 interface ScreenState {
     account: ContactType | undefined,
     displayName: string,
+    text: string,
     uid: string,
 }
 
@@ -35,6 +37,7 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
         this.state = {
             account: undefined,
             displayName: '',
+            text: '',
             uid: props.route,
         };
 
@@ -57,8 +60,12 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
             });
     }
 
+    send = () => {
+        console.log(this.state.text);
+        this.setState({ text: '' });
+    }
+
     render() {
-        console.log(this.props.route);
         return (
             <View style={{ ...ScreenStyles.screen, backgroundColor: theme.backgroundC }}>
                 <Header />
@@ -78,6 +85,27 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                             color={theme.textLightC}
                             name='account'
                             size={30}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <ScrollView>
+
+                </ScrollView>
+                <SeparatorLine width={1} />
+                <View style={ChatScreenStyles.textInputContainer}>
+                    <TextInput
+                        multiline
+                        onChangeText={(text: string) => this.setState({ text })}
+                        placeholder='start typing ...'
+                        placeholderTextColor={theme.textDisabledC}
+                        style={{ ...ChatScreenStyles.textInput, borderColor: theme.textDisabledC }}
+                        value={this.state.text}
+                    />
+                    <TouchableOpacity onPress={this.send}>
+                        <Icon
+                            color={theme.accent}
+                            name='send-circle'
+                            size={50}
                         />
                     </TouchableOpacity>
                 </View>
