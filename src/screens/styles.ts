@@ -204,4 +204,13 @@ export const ChatScreenStyles = StyleSheet.create({
         paddingVertical: 0,
         width: screenWidth * 0.76,
     },
+    sendBtn: {
+        alignItems: 'center',
+        borderRadius: 20,
+        display: 'flex',
+        elevation: 5,
+        justifyContent: 'center',
+        height: 40,
+        width: 40,
+    },
 });

@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 
 import Header from '../components/Headers/InAppHeader';
-import SeparatorLine from '../components/SeparatorLine';
 
 import { theme } from '../data/color';
 import { firebaseFetchAccInfo } from '../firebase/data';
@@ -89,9 +88,8 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                     </TouchableOpacity>
                 </View>
                 <ScrollView>
-
+                    
                 </ScrollView>
-                <SeparatorLine width={1} />
                 <View style={ChatScreenStyles.textInputContainer}>
                     <TextInput
                         multiline
@@ -101,11 +99,11 @@ class Screen extends React.Component<NavProps & ReduxProps, ScreenState> {
                         style={{ ...ChatScreenStyles.textInput, borderColor: theme.textDisabledC }}
                         value={this.state.text}
                     />
-                    <TouchableOpacity onPress={this.send}>
+                    <TouchableOpacity onPress={this.send} style={{ ...ChatScreenStyles.sendBtn, backgroundColor: theme.accent }}>
                         <Icon
-                            color={theme.accent}
-                            name='send-circle'
-                            size={50}
+                            color={theme.textLightC}
+                            name='send'
+                            size={20}
                         />
                     </TouchableOpacity>
                 </View>
