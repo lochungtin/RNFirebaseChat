@@ -10,9 +10,11 @@ import { theme } from '../data/color';
 import { LoginScreensStyles, ScreenStyles } from './styles';
 
 import { signIn } from '../firebase/auth';
+import firebaseConfig from '../firebase/config';
 import { firebaseFetchAccInfo } from '../firebase/data';
 import { login, updateAccInfo } from '../redux/action';
 import { store } from '../redux/store';
+import { AccountInfoType } from '../types';
 
 interface NavProps {
     navigation: StackNavigationProp<any, any>
@@ -32,12 +34,14 @@ export default class Screen extends React.Component<NavProps> {
         signIn(this.state.email, this.state.pswd)
             .then(res => {
                 store.dispatch(login({
-					email: res.user?.email || '',
-					uid: res.user?.uid || '',
-				}));
+                    email: res.user?.email || '',
+                    uid: res.user?.uid || '',
+                }));
 
-                firebaseFetchAccInfo(res.user?.uid || '')
-                    .then(res => store.dispatch(updateAccInfo(res)));
+                firebaseFetchAccInfo(res.user?.uid || '', (res: firebaseConfig.database.DataSnapshot) => {
+                    let account: AccountInfoType = res.val();
+                    store.dispatch(updateAccInfo(account));
+                });
             })
             .catch(err => {
                 let message: string;
