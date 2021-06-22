@@ -10,16 +10,7 @@ This project took approximately 4 days to complete. I worked around 14 to 15 hou
 
 Below includes a detailed breakdown of the areas that I worked on each day.
 
-## Gallery
-
-Below are some screenshots showcasing the app (android)
-
-|        Home (Landing)        |             Chat              |             Chat              |      Friend's Account View      |
-| :--------------------------: | :---------------------------: | :---------------------------: | :-----------------------------: |
-| <img src='./img/s_home.jpg'> | <img src='./img/s_chat1.jpg'> | <img src='./img/s_chat2.jpg'> | <img src='./img/s_accView.jpg'> |
-
-
-## Workflow and Schedule
+### Workflow and Schedule
 
 - Day 1
     - Planning
@@ -41,7 +32,46 @@ Below are some screenshots showcasing the app (android)
 - Day 5
     - Documentation and readme finalisation
 
+## Gallery
+
+Below are some screenshots showcasing the app (android)
+
+|        Home (Landing)        |             Chat              |             Chat              |      Friend's Account View      |
+| :--------------------------: | :---------------------------: | :---------------------------: | :-----------------------------: |
+| <img src='./img/s_home.jpg'> | <img src='./img/s_chat1.jpg'> | <img src='./img/s_chat2.jpg'> | <img src='./img/s_accView.jpg'> |
+
 ## Technical Details
+
+### Authentication Flow
+
+The authentication flow of the app is done by selectively rendering two sets of screens based on whether the user is logged in.
+
+### Realtime Database
+
+Apart from the user's account, everything is dynamically loaded. Each component listens to branches of the firebase JSON tree that contains information it needs. So whenever that values mutate, the component will be able to render and update itself.
+
+Dynamic loading is also used in the chat screen. As this is a chat app, it is expected for a large amount of messages to be exchanged and having to download the entire subtree of messages would hinder the application's performance. To deal with this issue, only the latest messages will be fetched on the initial render. And if the user wishes to load previous messages, scrolling to the top of the chat and refreshing will pull more messages from the database.
+
+### Friend Adding System
+
+QRCode scanning is used for adding contacts. The user's UID is encoded into a QRCode, other people can use the app's in-app scanner to scan the code. On detection, the database will be updated and the contacts will immediately appear on the home screen of both users.
+
+### Libraries Used
+
+Below is a list of all the node packages used for the project that are worth noting
+
+- firebase
+- react-native-qrcode-scanner (and all of its subsequent packages)
+  - react-native-camera
+  - react-native-permissions
+- react-native-qrcode-svg
+- react-native-svg
+- react-navigation (and all of its subsequent packages)
+  - the stack navigation package
+- redux (and all of its subsequent packages)
+  - react-redux
+    - redux-persist
+    - react-native-async-storage
 
 ## More Screenshots
 
