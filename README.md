@@ -54,3 +54,11 @@ Below are some more screenshots taken from the app (android)
 |         My Account          |     Account Detail Editing      |        QRCode Scanner         |       QRCode Generation        |
 | :-------------------------: | :-----------------------------: | :---------------------------: | :----------------------------: |
 | <img src='./img/s_acc.jpg'> | <img src='./img/s_accEdit.jpg'> | <img src='./img/s_scanner.jpg'> | <img src='./img/s_qrcode.jpg'> |
+
+## Maintenance and Future Updates
+
+As of now, there are no plans to maintain nor further develop this project, as this is only a weekend sprint build.
+
+Althought there is no incentive to do so, the way to app is coded and designed is prepared for future expansion. Data dependency is well managed and minimal (no circular referencing and dependencies). The code base has been abstracted and components are very reusable.
+
+But for those curious people out there who wishes to give it a test, a release .apk is <a href='https://github.com/lochungtin/RNFirebaseChat/releases/tag/v1.0.0'>attached</a> in the release page of this repo.
